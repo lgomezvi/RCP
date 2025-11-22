@@ -19,4 +19,11 @@
 <!-- Create the ROS → Arduino bridge node (arduino_bridge_node.py)
 Create the Arduino firmware (closed-loop movement)
 Implement the /execute IR endpoint
-Build the Next.js UI + agent (connect w what thomson did )
+Build the Next.js UI + agent (connect w what thomson did )-->
+
+# what got done 
+<!-- Database fully integrated
+FastAPI endpoints working
+ROS hooks prepared
+Command pipeline prepared
+Status + logs available -->
