@@ -28,7 +28,7 @@ export default function Home() {
 				mouseReact={true}
 				mouseStrength={0.5}
 				pageLoadAnimation={true} 
-				brightness={0.6}
+				brightness={0.5}
 				className="h-full" />
 
 			<div className="flex absolute flex-col gap-4 items-center">
@@ -39,10 +39,10 @@ export default function Home() {
 					className='text-3xl whitespace-nowrap md:text-6xl lg:text-7xl'>
 					Robot Context Protocol 
 				</GlitchText>
-				<div className="flex gap-4 mt-10">
-					<Link href="/calibrating" className="text-white hover:font-bold hover:underline">Calibrating</Link>
-					<Link href="/demo" className="text-white hover:font-bold hover:underline">Demo</Link>
-					<Link href="/presentation" className="text-white hover:font-bold hover:underline">What is It?</Link>
+				<div className="flex gap-8 mt-10">
+					<Link href="/calibrating" className="text-xl font-bold text-white bg-black transition-transform md:text-2xl lg:text-3xl hover:underline hover:scale-110">Calibrating</Link>
+					<Link href="/demo" className="text-xl font-bold text-white bg-black transition-transform md:text-2xl lg:text-3xl hover:underline hover:scale-110">Demo</Link>
+					<Link href="/presentation" className="text-xl font-bold text-white bg-black transition-transform md:text-2xl lg:text-3xl hover:underline hover:scale-110">What is It?</Link>
 
 				</div>
 			</div>
