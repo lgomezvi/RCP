@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // A new component for the welcome screen
 const WelcomeScreen = () => (
@@ -23,15 +23,36 @@ const WelcomeScreen = () => (
   </div>
 );
 
+const StatusDisplay = ({ status }) => {
+  const statusStyles = {
+    ready: { text: 'Agent Ready', bg: 'text-lime-500' },
+    submitted: { text: 'Sent', bg: 'text-yellow-500' },
+    error: { text: 'Error', bg: 'text-red-500' },
+  };
+
+  const currentStatus = statusStyles[status] || statusStyles.ready;
+
+  return (
+    <h1 className={`text-xl font-bold text-center rounded-md ${currentStatus.bg}`}>
+      {currentStatus.text}
+    </h1>
+  );
+};
+
 export default function Chat() {
   const [input, setInput] = useState('');
   const { messages, sendMessage, status } = useChat();
+  const [chatStatus, setChatStatus] = useState('ready');
+
+  useEffect(() => {
+    setChatStatus(status);
+  }, [status]);
 
   return (
     <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
       {/* Header */}
-      <header className="p-4 bg-white border-b shadow-sm dark:bg-gray-800 dark:border-gray-700">
-        <h1 className="text-xl font-bold text-center text-gray-800 dark:text-white">Reptile Calibration</h1>
+      <header className="p-4">
+        <StatusDisplay status={chatStatus} />
       </header>
 
       {/* Chat message area */}
