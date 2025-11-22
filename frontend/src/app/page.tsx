@@ -1,4 +1,3 @@
-
 'use client'
 import Image from "next/image";
 import Link from "next/link";
@@ -30,7 +29,7 @@ export default function Home() {
 				brightness={0.6}
 				className="h-full" />
 
-			<div className="absolute">
+			<div className="flex absolute flex-col gap-4 items-center">
 				<GlitchText
 					speed={1}
 					enableShadows={true}
@@ -38,6 +37,12 @@ export default function Home() {
 					className='text-3xl whitespace-nowrap md:text-6xl lg:text-7xl'>
 					Robot Context Protocol 
 				</GlitchText>
+				<div className="flex gap-4">
+					<Link href="/calibrating" className="text-white hover:underline">Calibrating</Link>
+					<Link href="/demo" className="text-white hover:underline">Demo</Link>
+					<Link href="/presentation" className="text-white hover:underline">What is It?</Link>
+
+				</div>
 			</div>
 
 		</div>
