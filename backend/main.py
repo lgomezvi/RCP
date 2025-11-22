@@ -56,3 +56,14 @@ def command(cmd: str): # you pass a string which will be the command to send to 
         return {"status": "sent", "cmd": cmd}
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+from backend.robot_controller import move_joint
+
+@app.post("/move")
+def move(joint: str, angle: int):
+    return move_joint(joint, angle)
+
+
+
+        

@@ -1,4 +1,4 @@
-import serial from pyserial # might have to pip install this nnot sure if i have it 
+import serial #from pyserial # might have to pip install this nnot sure if i have it 
 import threading
 import time
 
@@ -17,7 +17,8 @@ from backend.db import log_event, update_robot_state
 
 
 ##3 READ THE PART I SEND FROM ARDUINO TO KNOW WHAT PORT TO USE AND THEN YOU CAN DO THE ARUDINO CODE PART 
-SERIAL_PORT = "/dev/tty.usbmodem1101"   # <-- you MUST update this
+
+SERIAL_PORT = "/dev/cu.usbmodem2101"
 BAUD_RATE = 115200
 
 ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=0.1)
