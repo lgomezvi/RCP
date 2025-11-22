@@ -81,20 +81,22 @@ export async function POST(req: Request) {
 		// Get the prompt and messages from the request body
 		const { messages }: { messages: UIMessage[] } = await req.json();
 
-		// 1. Query the safeguard first
-		const safeguardResult = await checkSafeguard(messages);
-
-		// 2. Check the result from the safeguard
-		if (!safeguardResult.is_safe) {
-			// 3a. If it's not safe, return a 400 response
-			return new Response(JSON.stringify({
-				error: 'Your request could not be processed as it was deemed unsafe.',
-				reason: safeguardResult.reason,
-			}), {
-				status: 400,
-				headers: { 'Content-Type': 'application/json' },
-			});
-		}
+		/* 		NOTE: commented out safeguard during development. 
+		 *
+		 *  		// 1. Query the safeguard first
+				const safeguardResult = await checkSafeguard(messages);
+		
+				// 2. Check the result from the safeguard
+				if (!safeguardResult.is_safe) {
+					// 3a. If it's not safe, return a 400 response
+					return new Response(JSON.stringify({
+						error: 'Your request could not be processed as it was deemed unsafe.',
+						reason: safeguardResult.reason,
+					}), {
+						status: 400,
+						headers: { 'Content-Type': 'application/json' },
+					});
+				} */
 
 		// 3b. If it is safe, proceed to query the main LLM
 		const result = await streamText({
