@@ -1,20 +1,21 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 // A new component for the welcome screen
 const WelcomeScreen = () => (
-  <div className="flex flex-col justify-center items-center h-full text-center text-gray-500 dark:text-gray-400">
+  <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 dark:text-gray-400">
     <div className="max-w-md">
+      <h2 className="text-2xl font-semibold mb-2">Reptile Calibration AI</h2>
       <p className="mb-6">Start the conversation by asking a question below.</p>
       <div className="grid grid-cols-2 gap-4 text-sm">
-        <div className="p-4 rounded-lg border dark:border-gray-600">
-          <h3 className="mb-1 font-semibold">Example Prompt 1</h3>
+        <div className="p-4 border rounded-lg dark:border-gray-600">
+          <h3 className="font-semibold mb-1">Example Prompt 1</h3>
           <p>What are the key differences between a python and a boa?</p>
         </div>
-        <div className="p-4 rounded-lg border dark:border-gray-600">
-          <h3 className="mb-1 font-semibold">Example Prompt 2</h3>
+        <div className="p-4 border rounded-lg dark:border-gray-600">
+          <h3 className="font-semibold mb-1">Example Prompt 2</h3>
           <p>Tell me about the habitat of the Komodo dragon.</p>
         </div>
       </div>
@@ -22,36 +23,15 @@ const WelcomeScreen = () => (
   </div>
 );
 
-const StatusDisplay = ({ status }) => {
-  const statusStyles = {
-    ready: { text: 'Agent Ready', bg: 'text-lime-500' },
-    submitted: { text: 'Sent', bg: 'text-yellow-500' },
-    error: { text: 'Error', bg: 'text-red-500' },
-  };
-
-  const currentStatus = statusStyles[status] || statusStyles.ready;
-
-  return (
-    <h1 className={`text-xl font-bold text-center rounded-md ${currentStatus.bg}`}>
-      {currentStatus.text}
-    </h1>
-  );
-};
-
 export default function Chat() {
   const [input, setInput] = useState('');
   const { messages, sendMessage, status } = useChat();
-  const [chatStatus, setChatStatus] = useState('ready');
-
-  useEffect(() => {
-    setChatStatus(status);
-  }, [status]);
 
   return (
     <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
       {/* Header */}
-      <header className="p-4">
-        <StatusDisplay status={chatStatus} />
+      <header className="p-4 bg-white border-b shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <h1 className="text-xl font-bold text-center text-gray-800 dark:text-white">Reptile Calibration</h1>
       </header>
 
       {/* Chat message area */}
