@@ -1,3 +1,52 @@
+# Robot Context Protocol (RCP) 🤖
+
+> A hardware-independent protocol that gives LLMs the ability to control any robot using natural language.
+
+## 🎯 Motivation
+
+Arbitrary degrees of freedom in robotics make it nearly impossible to create standard AI solutions. Different robots require different control systems, creating massive barriers to AI integration.
+
+**RCP solves this by using natural language** - which has denser meaning and better semantics than traditional control interfaces. Built on Model Context Protocol (MCP), RCP enables AI agents to directly control robots regardless of hardware configuration.
+
+### The Vision
+
+Instead of programming complex inverse kinematics and motor controls, simply say:
+
+```
+"Pick up the red block and place it in the box"
+```
+
+The AI agent handles the rest - planning, execution, and adaptation.
+
+## 🏗️ Architecture
+
+### Workflow
+
+```
+User Command → Planning Agent (LLM) → Execution Agent (SLM) → RCP Server (Robot) → Physical Hardware
+                      ↑                       ↑                      ↑
+                      └───── Context ─────────┴────── Sensors ───────┘
+```
+
+### Three-Stage Process
+
+1. **Connection & Discovery**: Robot exposes capabilities via WebSocket (streaming) and HTTP (commands)
+2. **Calibration**: Agent explores hardware, builds few-shot prompts, creates robot-specific knowledge base
+3. **Active Control**: High-level commands → decomposition → low-latency execution with continuous feedback
+
+## 🛠️ Technology Stack
+
+### Software
+- **Agents**: LLM (planning) + SLM (execution)
+- **Memory**: ChromaDB (vector store), Time-series DB (sensor context)
+- **Frontend**: Next.js (control interface + logging)
+- **Communication**: WebSocket (sensor streaming), HTTP (commands)
+
+### Hardware
+- **Controller**: Raspberry Pi (RCP server)
+- **Actuators**: Arduino + servo motors
+- **Sensors**: Gripper force sensors, LiDAR
+
 # Project Setup
 
 This repository contains a monorepo with a frontend, backend, and Arduino code.
