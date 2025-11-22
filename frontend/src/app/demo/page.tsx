@@ -1,5 +1,6 @@
 import Chat from "@/components/DemoChat";
 import StreamingTerminal from "@/components/StreamingTerminal";
+import ArmView from "@/components/arm/ArmView";
 
 
 export default function Page() {
@@ -9,7 +10,9 @@ export default function Page() {
 		<Chat />
 	</div>
       <div className="grid grid-rows-2 gap-0">
-        <div className="bg-gray-400 border-b-4 border-black"></div>
+        <div className="bg-gray-400 border-b-4 border-black">
+		<ArmView />
+	</div>
         <div className="flex justify-center items-center bg-gray-600 flex-cols">
 			<StreamingTerminal />
 		</div>
