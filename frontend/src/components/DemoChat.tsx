@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // A new component for the welcome screen
 const WelcomeScreen = () => (
@@ -25,7 +25,7 @@ const WelcomeScreen = () => (
 const StatusDisplay = ({ status }) => {
   const statusStyles = {
     ready: { text: 'Agent Ready', bg: 'text-lime-500' },
-    sent: { text: 'Sent', bg: 'text-yellow-500' },
+    submitted: { text: 'Sent', bg: 'text-yellow-500' },
     error: { text: 'Error', bg: 'text-red-500' },
   };
 
@@ -41,12 +41,17 @@ const StatusDisplay = ({ status }) => {
 export default function Chat() {
   const [input, setInput] = useState('');
   const { messages, sendMessage, status } = useChat();
+  const [chatStatus, setChatStatus] = useState('ready');
+
+  useEffect(() => {
+    setChatStatus(status);
+  }, [status]);
 
   return (
     <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
       {/* Header */}
       <header className="p-4">
-        <StatusDisplay status={status} />
+        <StatusDisplay status={chatStatus} />
       </header>
 
       {/* Chat message area */}
