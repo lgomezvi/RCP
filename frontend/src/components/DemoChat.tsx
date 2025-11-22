@@ -2,6 +2,7 @@
 
 import { useChat } from '@ai-sdk/react';
 import { useState, useEffect } from 'react';
+import { DefaultChatTransport } from 'ai';
 
 // A new component for the welcome screen
 const WelcomeScreen = () => (
@@ -40,7 +41,11 @@ const StatusDisplay = ({ status }) => {
 
 export default function Chat() {
   const [input, setInput] = useState('');
-  const { messages, sendMessage, status } = useChat();
+  const { messages, sendMessage, status } = useChat({
+		transport: new DefaultChatTransport({
+			api: '/api/demo',
+		}),
+	});
   const [chatStatus, setChatStatus] = useState('ready');
 
   useEffect(() => {
