@@ -53,20 +53,20 @@ def command(cmd: str): # you pass a string which will be the command to send to 
     log_event("backend", "command", cmd) # uses method in db.py to log the command being sent
 
     # Publish to ROS (later we connect this) -- for now just a placeholder
-    try:
-        # willl later have to look into this into great detail 
-        from backend.ros_interface import ros_publish_command 
-        ros_publish_command(cmd)
-    except Exception as e:
-        return {"status": "failed", "error": str(e)}
+    # try:
+    #     # willl later have to look into this into great detail 
+    #     from backend.ros_interface import ros_publish_command 
+    #     ros_publish_command(cmd)
+    # except Exception as e:
+    #     return {"status": "failed", "error": str(e)}
 
     return {"status": "sent", "command": cmd}
 
 
-from backend.ros_interface import run_ros_in_background
+# from backend.ros_interface import run_ros_in_background
 
-@app.on_event("startup")
-def startup_event():
-    print("Starting ROS node in background...")
-    run_ros_in_background()
-    print("ROS node started.")
+# @app.on_event("startup")
+# def startup_event():
+#     print("Starting ROS node in background...")
+#     run_ros_in_background()
+#     print("ROS node started.")
