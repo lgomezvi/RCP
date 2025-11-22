@@ -6,16 +6,6 @@ from groq import Groq
 
 from dotenv import load_dotenv
 
-# Load .env from parent directory (project root)
-load_dotenv(dotenv_path='../.env')
-# Get Groq API key from environment variable
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-
-if not GROQ_API_KEY:
-    raise ValueError("GROQ_API_KEY environment variable not set")
-
-groq_client = Groq(api_key=GROQ_API_KEY)
-
 emb_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
     model_name="all-MiniLM-L6-v2" 
 )
@@ -32,14 +22,9 @@ collection = chroma_client.get_or_create_collection(
 def add_documents():
     """Simulate adding data to the vector database."""
     documents = [
-        "Groq's LPU (Language Processing Unit) offers ultra-low latency inference.",
-        "ChromaDB is an open-source AI-native vector database.",
-        "RAG stands for Retrieval Augmented Generation.",
-        "The speed of light is approximately 299,792,458 meters per second.",
-        "The best embedding models for RAG are typically from OpenAI or Cohere."
     ]
     
-    ids = ["doc1", "doc2", "doc3", "doc4", "doc5"]
+    ids = []
     
     print(f"📥 Embedding {len(documents)} documents using {emb_fn.__class__.__name__}...")
     collection.add(
@@ -66,36 +51,33 @@ def query_groq_rag(question: str):
     context_text = results['documents'][0][0]
     print(f"📄 Found Context: \"{context_text}\"")
 
-    # 2. GENERATE (Groq)
-    print("⚡ Sending to Groq for generation...")
-    chat_completion = groq_client.chat.completions.create(
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a helpful assistant. Use the provided context to answer the user."
-            },
-            {
-                "role": "user",
-                "content": f"Context: {context_text}\n\nQuestion: {question}"
-            }
-        ],
-        model="llama-3.1-8b-instant", # Or 'mixtral-8x7b-32768'
-        temperature=0.5,
-    )
+    # # 2. GENERATE (Groq)
+    # print("⚡ Sending to Groq for generation...")
+    # chat_completion = groq_client.chat.completions.create(
+    #     messages=[
+    #         {
+    #             "role": "system",
+    #             "content": "You are a helpful assistant. Use the provided context to answer the user."
+    #         },
+    #         {
+    #             "role": "user",
+    #             "content": f"Context: {context_text}\n\nQuestion: {question}"
+    #         }
+    #     ],
+    #     model="llama-3.1-8b-instant", # Or 'mixtral-8x7b-32768'
+    #     temperature=0.5,
+    # )
 
-    return chat_completion.choices[0].message.content
+    # return chat_completion.choices[0].message.content
 
 # ------------------------------------------------------------------
 # MAIN EXECUTION
 # ------------------------------------------------------------------
 if __name__ == "__main__":
     # 1. Setup Data
-    add_documents()
     
     # 2. Run RAG
-    user_query = "What models should I use for RAG embeddings?"
+    user_query = "What does RAG stand for?"
     answer = query_groq_rag(user_query)
     
     print("\n" + "="*40)
-    print(f"🤖 Groq Answer:\n{answer}")
-    print("="*40)
