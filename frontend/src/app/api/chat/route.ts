@@ -14,12 +14,13 @@ const openrouter = createOpenRouter();
 
 // Helper function to query the safeguard API
 async function checkSafeguard(messages: UIMessage[]) {
+	console.log('--- Starting Safeguard Check ---');
 	try {
 		// Extract the last user message for checking
 		const userMessage = messages.filter(m => m.role === 'user').slice(-1)[0];
 
 		if (!userMessage || !userMessage.parts) {
-			// If there's no user message or parts, consider it safe
+			console.log('Safeguard: No user message or parts found. Skipping check.');
 			return { is_safe: true };
 		}
 
@@ -27,9 +28,11 @@ async function checkSafeguard(messages: UIMessage[]) {
 		const textPart = userMessage.parts.find(part => part.type === 'text');
 
 		if (!textPart) {
-			// If there's no text part, consider it safe
+			console.log('Safeguard: No text part found in the message. Skipping check.');
 			return { is_safe: true };
 		}
+
+		console.log('Safeguard: Checking prompt:', textPart.text);
 
 		const client = new OpenAI({
 			apiKey: process.env.SAFEGUARD_KEY,
@@ -47,22 +50,27 @@ async function checkSafeguard(messages: UIMessage[]) {
 		});
 
 		const responseContent = completion.choices[0].message.content;
+		console.log('Safeguard: Raw response content:', responseContent);
+
 
 		if (!responseContent) {
-			console.error('Safeguard returned no content.');
+			console.error('Safeguard: Returned no content.');
 			return { is_safe: false, reason: 'Failed to check prompt safety.' };
 		}
 
 		try {
 			// The response from the LLM should be a JSON string.
-			return JSON.parse(responseContent);
+			const parsedResponse = JSON.parse(responseContent);
+			console.log('Safeguard: Parsed response:', parsedResponse);
+			console.log('--- Safeguard Check Finished ---');
+			return parsedResponse;
 		} catch (error) {
-			console.error('Failed to parse safeguard response as JSON:', responseContent);
+			console.error('Safeguard: Failed to parse response as JSON.', error);
 			return { is_safe: false, reason: 'Invalid response from safeguard.' };
 		}
 
 	} catch (error) {
-		console.error('Error calling safeguard API:', error);
+		console.error('Safeguard: Error calling API.', error);
 		return { is_safe: false, reason: 'Error checking prompt safety.' };
 	}
 }
