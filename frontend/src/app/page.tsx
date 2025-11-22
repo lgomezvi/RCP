@@ -37,10 +37,10 @@ export default function Home() {
 					className='text-3xl whitespace-nowrap md:text-6xl lg:text-7xl'>
 					Robot Context Protocol 
 				</GlitchText>
-				<div className="flex gap-4">
-					<Link href="/calibrating" className="text-white hover:underline">Calibrating</Link>
-					<Link href="/demo" className="text-white hover:underline">Demo</Link>
-					<Link href="/presentation" className="text-white hover:underline">What is It?</Link>
+				<div className="flex gap-4 mt-10">
+					<Link href="/calibrating" className="text-white hover:font-bold hover:underline">Calibrating</Link>
+					<Link href="/demo" className="text-white hover:font-bold hover:underline">Demo</Link>
+					<Link href="/presentation" className="text-white hover:font-bold hover:underline">What is It?</Link>
 
 				</div>
 			</div>
