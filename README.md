@@ -34,46 +34,17 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser. You can access them in your code like this: `process.env.NEXT_PUBLIC_API_URL`.
 
-## Backend (Python)
+## Backend Python setup
 
-To set up and run the backend server:
+Download uv: 
 
-1.  **Navigate to the backend directory:**
-    ```bash
-    cd backend
-    ```
+cd into backend, run uv sync, then uv venv, `source .venv/bin/activate`.
 
-2.  **Create a virtual environment using `uv`:**
-    ```bash
-    uv venv
-    ```
-
-3.  **Activate the virtual environment:**
-    ```bash
-    source .venv/bin/activate
-    ```
-    *(On Windows, use `.venv\Scripts\activate`)*
-
-4.  **Install dependencies:**
-    The dependencies are listed in the `pyproject.toml` file. Install them using `uv`:
-    ```bash
-    uv pip install -e .
-    ```
-
-5.  **Run the backend application:**
-    ```bash
-    python main.py
-    ```
+cd to project root, run `uvicorn backend.main:app --reload` to run the server.
 
 ### Environment Variables
 
-Create a `.env` file in the `backend` directory.
-
-```bash
-# backend/.env
-
-DATABASE_URL="your-database-url"
-```
+Check config.py and .env.example for loading environment variables for Open Router.
 
 To load these variables, you can use the `dotenv` library in your Python code (which is included in `pyproject.toml`):
 
