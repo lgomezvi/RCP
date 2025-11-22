@@ -12,7 +12,7 @@ export async function POST() {
 		// 2. MUST use POST method
 		// 3. MUST use the correct endpoint for Scribe Real-Time Token
 		const elevenLabsResponse = await fetch(
-			'https://api.elevenlabs.io/v1/single-use-token/speech-to-text-realtime',
+			'https://api.elevenlabs.io/v1/single-use-token/realtime_scribe',
 			{
 				method: 'POST',
 				headers: {
@@ -36,6 +36,7 @@ export async function POST() {
 		}
 
 		const data = await elevenLabsResponse.json();
+		console.log('Generated ElevenLabs token:', data.token);
 
 		// 5. Correctly return a NextResponse object containing the temporary token
 		return NextResponse.json({ token: data.token });

@@ -50,6 +50,7 @@ export default function Chat() {
   const [chatStatus, setChatStatus] = useState('ready');
 
   const onPartialChange = useCallback((text: string) => {
+    console.log('Transcribed speech:', text);
     setInput(text);
   }, []);
 
