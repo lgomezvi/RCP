@@ -1,8 +1,10 @@
 'use client'
 import Image from "next/image";
 import Link from "next/link";
-import FaultyTerminal from "@/components/FaultyTerminal";
+import dynamic from 'next/dynamic';
 import GlitchText from '@/components/GlitchText';
+
+const FaultyTerminal = dynamic(() => import('@/components/FaultyTerminal'), { ssr: false });
 
   
 export default function Home() {
