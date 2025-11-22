@@ -3,7 +3,6 @@
 import { useChat } from '@ai-sdk/react';
 import { useState, useEffect, useCallback } from 'react';
 import { DefaultChatTransport } from 'ai';
-import { useScribe } from '@/hooks/useScribe';
 
 // A new component for the welcome screen
 const WelcomeScreen = () => (
@@ -54,17 +53,7 @@ export default function Chat() {
     setInput(text);
   }, []);
 
-  const { isRecording, startRecording, stopRecording } = useScribe({ onPartialChange });
-
-  const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
-  };
-
-  useEffect(() => {
+ useEffect(() => {
     setChatStatus(status);
   }, [status]);
 
@@ -128,18 +117,6 @@ export default function Chat() {
             placeholder="Ask me anything..."
             onChange={e => setInput(e.currentTarget.value)}
           />
-          <button
-            type="button"
-            onClick={toggleRecording}
-            className={`py-3 px-5 ml-3 rounded-full transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none ${
-              isRecording
-                ? 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
-                : 'bg-gray-300 text-gray-700 hover:bg-gray-400 focus:ring-gray-500 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500'
-            }`}
-            aria-label={isRecording ? 'Stop recording' : 'Start recording'}
-          >
-            {isRecording ? '🔴' : '🎙️'}
-          </button>
           <button 
             type="submit" 
             className="py-3 px-5 ml-3 text-white bg-blue-600 rounded-full opacity-75 transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:bg-gray-500" 
