@@ -13,3 +13,8 @@ services:
       - "8000:8000"
     volumes:
         - ./backend:/app/backend   # optional for live reload
+  chromadb:
+    image:
+      chromadb/chroma
+    ports:
+    - "5000:5000"
