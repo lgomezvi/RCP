@@ -57,6 +57,7 @@ backend/*.egg-info
 backend/.venv
 backend/venv
 backend/robot.db
+backend/.env*
 
 .env
 
