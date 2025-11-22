@@ -44,6 +44,8 @@ frontend/next-env.d.ts
 
 # Python-generated files
 backend/__pycache__/
+backend/api/__pycache__/
+backend/api/utils/__pycache__/
 backend/*.py[oc]
 backend/build/
 backend/dist/
