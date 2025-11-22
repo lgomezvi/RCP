@@ -60,3 +60,5 @@ backend/robot.db
 
 .env
 
+__pycache__
+

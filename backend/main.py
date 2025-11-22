@@ -2,8 +2,11 @@ from fastapi import FastAPI # main class that creates web app
 from fastapi.responses import JSONResponse # to return JSON responses with custom status codes
 
 from backend.db import get_recent_events, get_robot_state, log_event
-from backend.serial_interface import send_command
+# from backend.serial_interface import send_command
 from backend.api import streaming ## ask thomosn what this is abt 
+
+from typing import List, Dict
+from backend.ai.instruction import action_to_instruction
 
 #uvicorn is a lightweight ASGI server to run FastAPI apps, basically it hosts the app
 app = FastAPI()
@@ -49,10 +52,15 @@ def status():
 
 # now we are dircetly inetarcting with the arduino through fastapi and logging eveyrthing
 
-def command(cmd: str): # you pass a string which will be the command to send to the robot
+def command(cmd: Dict[str, List[str]]): # you pass a string which will be the command to send to the robot
     # Log the outgoing commandis being done in the send_command function
     try:
-        send_command(cmd)
-        return {"status": "sent", "cmd": cmd}
+        instructions = []
+        for action in cmd["actions"]: 
+            # TODO vector db caching layer
+            instructions.append(action_to_instruction(action))
+            # TODO measure confidence of slm output
+            # TODO LLM+sensor context call
+        return {"instructions": instructions}
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
