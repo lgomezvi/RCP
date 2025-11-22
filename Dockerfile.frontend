@@ -1,0 +1,17 @@
+# Install deps
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+
+# Build
+FROM deps AS builder
+COPY . .
+RUN npm run build
+
+# Run
+FROM node:20-alpine AS runner
+WORKDIR /app
+COPY --from=builder /app ./
+EXPOSE 3000
+CMD ["npm", "start"]

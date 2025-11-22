@@ -54,5 +54,6 @@ backend/*.egg-info
 
 # Virtual environments
 backend/.venv
+backend/venv
 backend/robot.db
 
