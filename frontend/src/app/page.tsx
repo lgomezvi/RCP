@@ -1,66 +1,52 @@
+'use client'
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from 'next/dynamic';
+import GlitchText from '@/components/GlitchText';
 
+const FaultyTerminal = dynamic(() => import('@/components/FaultyTerminal'), { ssr: false });
+
+  
 export default function Home() {
-  return (
-    <div className="flex justify-center items-center min-h-screen font-sans dark:bg-black bg-zinc-50">
-      <main className="flex flex-col justify-between items-center py-32 px-16 w-full max-w-3xl min-h-screen bg-white sm:items-start dark:bg-black">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col gap-6 items-center text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold tracking-tight leading-10 text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex gap-2 justify-center items-center px-5 w-full h-12 rounded-full transition-colors bg-foreground text-background md:w-[158px] dark:hover:bg-[#ccc] hover:bg-[#383838]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex justify-center items-center px-5 w-full h-12 rounded-full border border-solid transition-colors hover:border-transparent border-black/[.08] md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] hover:bg-black/[.04]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
-}
+	return (
+		<div className="flex relative justify-center items-center w-full h-full">
+
+  			<FaultyTerminal
+				scale={1.5}
+				gridMul={[2, 1]}
+				digitSize={1.2}
+				timeScale={1}
+				pause={false}
+				scanlineIntensity={1}
+				glitchAmount={1}
+				flickerAmount={1}
+				noiseAmp={1}
+				chromaticAberration={0}
+				dither={0}
+				curvature={0.1}
+				tint="#65F736"
+				mouseReact={true}
+				mouseStrength={0.5}
+				pageLoadAnimation={true} 
+				brightness={0.5}
+				className="h-full" />
+
+			<div className="flex absolute flex-col gap-4 items-center">
+				<GlitchText
+					speed={1}
+					enableShadows={true}
+					enableOnHover={false}
+					className='text-3xl whitespace-nowrap md:text-6xl lg:text-7xl'>
+					Robot Context Protocol 
+				</GlitchText>
+				<div className="flex gap-8 mt-10">
+					<Link href="/calibrating" className="text-xl font-bold text-white bg-black transition-transform md:text-2xl lg:text-3xl hover:underline hover:scale-110">Calibrating</Link>
+					<Link href="/demo" className="text-xl font-bold text-white bg-black transition-transform md:text-2xl lg:text-3xl hover:underline hover:scale-110">Demo</Link>
+					<Link href="/presentation" className="text-xl font-bold text-white bg-black transition-transform md:text-2xl lg:text-3xl hover:underline hover:scale-110">What is It?</Link>
+
+				</div>
+			</div>
+
+		</div>
+	);
+}; 
