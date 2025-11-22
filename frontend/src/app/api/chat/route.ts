@@ -18,38 +18,49 @@ async function checkSafeguard(messages: UIMessage[]) {
 		// Extract the last user message for checking
 		const userMessage = messages.filter(m => m.role === 'user').slice(-1)[0];
 
-		if (!userMessage) {
-			// If there's no user message, consider it safe by default
+		if (!userMessage || !userMessage.parts) {
+			// If there's no user message or parts, consider it safe
+			return { is_safe: true };
+		}
+
+		// Find the text part of the message
+		const textPart = userMessage.parts.find(part => part.type === 'text');
+
+		if (!textPart) {
+			// If there's no text part, consider it safe
 			return { is_safe: true };
 		}
 
 		const client = new OpenAI({
 			apiKey: process.env.SAFEGUARD_KEY,
 			baseURL: "https://api.groq.com/openai/v1",
-
-		})
-
-		const response = await client.responses.create({
-			model: "openai/gpt-oss-20b",
-			input: , # TODO: make a prompt here!
-
-		});
-		const response = await fetch('https://api.grok.com/v1/safeguard', { // Replace with your actual Grok API endpoint
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${process.env.SAFEGUARD_KEY}`,
-			},
-			body: JSON.stringify({ prompt: userMessage.content }),
 		});
 
-		if (!response.ok) {
-			console.error('Safeguard API returned an error:', response.status, await response.text());
-			// Default to unsafe if the API fails
+		const systemPrompt = `You are a safeguard model. Your task is to determine if the user's prompt is safe. Respond with only a JSON object with two keys: "is_safe" (boolean) and "reason" (string). If the prompt is safe, set "is_safe" to true. If it is unsafe, set "is_safe" to false and provide a brief reason.`;
+
+		const completion = await client.chat.completions.create({
+			messages: [
+				{ role: "system", content: systemPrompt },
+				{ role: "user", content: textPart.text } // Use the text from the text part
+			],
+			model: "openai/gpt-oss-20b", // DO NOT CHANGE
+		});
+
+		const responseContent = completion.choices[0].message.content;
+
+		if (!responseContent) {
+			console.error('Safeguard returned no content.');
 			return { is_safe: false, reason: 'Failed to check prompt safety.' };
 		}
 
-		return await response.json();
+		try {
+			// The response from the LLM should be a JSON string.
+			return JSON.parse(responseContent);
+		} catch (error) {
+			console.error('Failed to parse safeguard response as JSON:', responseContent);
+			return { is_safe: false, reason: 'Invalid response from safeguard.' };
+		}
+
 	} catch (error) {
 		console.error('Error calling safeguard API:', error);
 		return { is_safe: false, reason: 'Error checking prompt safety.' };
