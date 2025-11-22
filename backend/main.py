@@ -2,12 +2,13 @@ from fastapi import FastAPI # main class that creates web app
 from fastapi.responses import JSONResponse # to return JSON responses with custom status codes
 
 from backend.db import get_recent_events, get_robot_state, log_event
-from backend.api import streaming
+from backend.serial_interface import send_command
+from backend.api import streaming ## ask thomosn what this is abt 
 
 #uvicorn is a lightweight ASGI server to run FastAPI apps, basically it hosts the app
 app = FastAPI()
 
-app.include_router(streaming.router)
+app.include_router(streaming.router) 
 
 @app.get("/")
 def root():
@@ -46,11 +47,15 @@ def status():
 # ===========================
 @app.post("/command")
 
-# here is the flow for how this is working  FastAPI → ros_publish_command → ROS topic /robot/commands → bridge node → Arduino.
+# now we are dircetly inetarcting with the arduino through fastapi and logging eveyrthing
 
 def command(cmd: str): # you pass a string which will be the command to send to the robot
-    # Log the outgoing command
-    log_event("backend", "command", cmd) # uses method in db.py to log the command being sent
+    # Log the outgoing commandis being done in the send_command function
+     try:
+        send_command(cmd)
+        return {"status": "sent", "cmd": cmd}
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
     # Publish to ROS (later we connect this) -- for now just a placeholder
     # try:
@@ -59,9 +64,6 @@ def command(cmd: str): # you pass a string which will be the command to send to 
     #     ros_publish_command(cmd)
     # except Exception as e:
     #     return {"status": "failed", "error": str(e)}
-
-    return {"status": "sent", "command": cmd}
-
 
 # from backend.ros_interface import run_ros_in_background
 
