@@ -10,7 +10,7 @@ export default function Page() {
 	</div>
       <div className="grid grid-rows-2 gap-0">
         <div className="bg-gray-400 border-b-4 border-black"></div>
-        <div className="bg-gray-600">
+        <div className="flex justify-center items-center bg-gray-600 flex-cols">
 			<StreamingTerminal />
 		</div>
       </div>
