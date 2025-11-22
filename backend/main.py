@@ -51,24 +51,8 @@ def status():
 
 def command(cmd: str): # you pass a string which will be the command to send to the robot
     # Log the outgoing commandis being done in the send_command function
-     try:
+    try:
         send_command(cmd)
         return {"status": "sent", "cmd": cmd}
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
-
-    # Publish to ROS (later we connect this) -- for now just a placeholder
-    # try:
-    #     # willl later have to look into this into great detail 
-    #     from backend.ros_interface import ros_publish_command 
-    #     ros_publish_command(cmd)
-    # except Exception as e:
-    #     return {"status": "failed", "error": str(e)}
-
-# from backend.ros_interface import run_ros_in_background
-
-# @app.on_event("startup")
-# def startup_event():
-#     print("Starting ROS node in background...")
-#     run_ros_in_background()
-#     print("ROS node started.")
