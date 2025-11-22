@@ -8,6 +8,11 @@ from backend.api import streaming ## ask thomosn what this is abt
 #uvicorn is a lightweight ASGI server to run FastAPI apps, basically it hosts the app
 app = FastAPI()
 
+# Global variables for arm control
+ser = None
+ikSolver = None
+arm_ready = False
+
 app.include_router(streaming.router) 
 
 @app.get("/")
