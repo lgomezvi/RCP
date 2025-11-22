@@ -6,7 +6,7 @@ import FaultyTerminal from "@/components/FaultyTerminal";
 
 export default function Home() {
 	return (
-		<div style={{ width: '100%', height: '600px', position: 'relative' }} className="relative w-full h-screen">
+		<div className="relative w-full h-full">
 
   			<FaultyTerminal
 				scale={1.5}
@@ -25,7 +25,8 @@ export default function Home() {
 				mouseReact={true}
 				mouseStrength={0.5}
 				pageLoadAnimation={true} 
-				brightness={0.6} />
+				brightness={0.6}
+				className="h-full" />
 		</div>
 	);
 }; 
