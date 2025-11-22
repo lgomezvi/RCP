@@ -1,17 +1,18 @@
-# Install deps
-FROM node:20-alpine AS deps
+# Use Node.js 20 Alpine
+FROM node:20-alpine
+
+# Set working directory
 WORKDIR /app
+
+# Install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Build
-FROM deps AS builder
+# Copy source code
 COPY . .
-RUN npm run build
 
-# Run
-FROM node:20-alpine AS runner
-WORKDIR /app
-COPY --from=builder /app ./
+# Expose dev server port
 EXPOSE 3000
-CMD ["npm", "start"]
+
+# Run Next.js in development mode
+CMD ["npm", "run", "dev"]
