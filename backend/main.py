@@ -2,9 +2,12 @@ from fastapi import FastAPI # main class that creates web app
 from fastapi.responses import JSONResponse # to return JSON responses with custom status codes
 
 from backend.db import get_recent_events, get_robot_state, log_event
+from backend.api import streaming
 
 #uvicorn is a lightweight ASGI server to run FastAPI apps, basically it hosts the app
 app = FastAPI()
+
+app.include_router(streaming.router)
 
 @app.get("/")
 def root():
