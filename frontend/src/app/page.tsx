@@ -3,10 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import FaultyTerminal from "@/components/FaultyTerminal";
+import GlitchText from '@/components/GlitchText';
 
+  
 export default function Home() {
 	return (
-		<div className="relative w-full h-full">
+		<div className="flex relative justify-center items-center w-full h-full">
 
   			<FaultyTerminal
 				scale={1.5}
@@ -27,6 +29,17 @@ export default function Home() {
 				pageLoadAnimation={true} 
 				brightness={0.6}
 				className="h-full" />
+
+			<div className="absolute">
+				<GlitchText
+					speed={1}
+					enableShadows={true}
+					enableOnHover={false}
+					className='text-3xl whitespace-nowrap md:text-6xl lg:text-7xl'>
+					Robot Context Protocol 
+				</GlitchText>
+			</div>
+
 		</div>
 	);
 }; 
