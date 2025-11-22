@@ -58,3 +58,5 @@ backend/.venv
 backend/venv
 backend/robot.db
 
+.env
+

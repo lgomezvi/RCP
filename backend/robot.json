@@ -1,0 +1,90 @@
+{
+  "axes": [
+    {
+      "axis": "waist",
+      "type": "revolute",
+      "servo_pin": 5,
+      "angle_deg": {
+        "min": 0,
+        "max": 180,
+        "default": 90
+      }
+    },
+    {
+      "axis": "shoulder",
+      "type": "revolute",
+      "servo_pin": 6,
+      "angle_deg": {
+        "min": 0,
+        "max": 180,
+        "default": 150
+      }
+    },
+    {
+      "axis": "elbow",
+      "type": "revolute",
+      "servo_pin": 7,
+      "angle_deg": {
+        "min": 0,
+        "max": 180,
+        "default": 35
+      }
+    },
+    {
+      "axis": "wrist_roll",
+      "type": "revolute",
+      "servo_pin": 8,
+      "angle_deg": {
+        "min": 0,
+        "max": 180,
+        "default": 140
+      }
+    },
+    {
+      "axis": "wrist_pitch",
+      "type": "revolute",
+      "servo_pin": 9,
+      "angle_deg": {
+        "min": 0,
+        "max": 180,
+        "default": 85
+      }
+    },
+    {
+      "axis": "gripper",
+      "type": "revolute",
+      "servo_pin": 10,
+      "angle_deg": {
+        "min": 0,
+        "max": 180,
+        "default": 80
+      }
+    }
+  ],
+  "actions": [
+    {
+      "action": "MOVE_AXIS",
+      "parameters": {
+        "axis": ["waist","shoulder","elbow","wrist_roll","wrist_pitch","gripper"],
+        "target_angle_deg": {
+          "min": 0,
+          "max": 180,
+          "default": null
+        },
+        "speed_delay_ms": {
+          "min": 1,
+          "max": 100,
+          "default": 20
+        }
+      }
+    },
+    {
+      "action": "HOME_POSITIONS",
+      "parameters": {}
+    }
+  ],
+  "units": {
+    "angle": "deg",
+    "time": "ms"
+  }
+}

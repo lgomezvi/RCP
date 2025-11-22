@@ -1,0 +1,8 @@
+{
+  "action": "<string>",
+  "parameters": {
+    "axis": "<string>",
+    "target_angle_deg": "<number>",
+    "speed_delay_ms": "<number>"
+}
+}
