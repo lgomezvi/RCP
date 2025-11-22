@@ -16,7 +16,6 @@ export default function Page() {
         <div className="bg-gray-400 border-b-4 border-black"></div>
         <div className="flex justify-center items-center bg-gray-600 flex-cols">
 			<StreamingTerminal />
-			<div className="absolute bottom-0 bg-blue-700">FOOTER</div>
 		</div>
       </div>
     </div>

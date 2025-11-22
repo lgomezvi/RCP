@@ -1,3 +1,8 @@
+# NOTE: this file returns live websocket status to the frontend 
+# for live changes on the UI for what happens during the closed 
+# feedback loop, updates to the robot status and to the robot 3D model.
+
+
 from fastapi import APIRouter, WebSocket
 import asyncio
 
