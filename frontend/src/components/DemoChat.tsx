@@ -7,7 +7,6 @@ import { useState } from 'react';
 const WelcomeScreen = () => (
   <div className="flex flex-col justify-center items-center h-full text-center text-gray-500 dark:text-gray-400">
     <div className="max-w-md">
-      <h2 className="mb-2 text-2xl font-semibold">Reptile Calibration AI</h2>
       <p className="mb-6">Start the conversation by asking a question below.</p>
       <div className="grid grid-cols-2 gap-4 text-sm">
         <div className="p-4 rounded-lg border dark:border-gray-600">
@@ -23,6 +22,22 @@ const WelcomeScreen = () => (
   </div>
 );
 
+const StatusDisplay = ({ status }) => {
+  const statusStyles = {
+    ready: { text: 'Agent Ready', bg: 'text-lime-500' },
+    sent: { text: 'Sent', bg: 'text-yellow-500' },
+    error: { text: 'Error', bg: 'text-red-500' },
+  };
+
+  const currentStatus = statusStyles[status] || statusStyles.ready;
+
+  return (
+    <h1 className={`text-xl font-bold text-center rounded-md ${currentStatus.bg}`}>
+      {currentStatus.text}
+    </h1>
+  );
+};
+
 export default function Chat() {
   const [input, setInput] = useState('');
   const { messages, sendMessage, status } = useChat();
@@ -31,7 +46,7 @@ export default function Chat() {
     <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
       {/* Header */}
       <header className="p-4">
-        <h1 className="text-xl font-bold text-center text-gray-800 dark:text-white">Reptile Calibration</h1>
+        <StatusDisplay status={status} />
       </header>
 
       {/* Chat message area */}
