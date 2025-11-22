@@ -107,7 +107,7 @@ export default function Chat() {
           className="flex items-center mx-auto max-w-2xl"
         >
           <input
-            className="flex-1 p-3 rounded-lg border transition-shadow dark:text-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none"
+            className="flex-1 p-4 rounded-lg border transition-shadow dark:text-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none"
             value={input}
             placeholder="Ask me anything..."
             onChange={e => setInput(e.currentTarget.value)}
