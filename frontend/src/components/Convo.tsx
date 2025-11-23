@@ -110,7 +110,7 @@ export default function Conversation() {
         </button>
       </div>
 
-      <div className="overflow-y-auto p-4 w-full flex-grow max-h-[calc(100%-12rem)] rounded border border-input mt-4">
+      <div className="overflow-y-auto p-4 w-full flex-grow max-h-[calc(100%-12rem)] rounded border border-input">
         {messages.map((msg) => (
           <div key={msg.id} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
             <span className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-primary text-foreground' : 'bg-secondary text-foreground'}`}>
@@ -120,8 +120,8 @@ export default function Conversation() {
         ))}
       </div>
 
-      <div className="flex w-full mt-4">
-        <div className="mx-auto w-full h-32 bg-accent rounded"></div>
+      <div className="flex w-full">
+        <div className="mx-auto w-full h-32 bg-accent"></div>
       </div> 
     </div>
   );
