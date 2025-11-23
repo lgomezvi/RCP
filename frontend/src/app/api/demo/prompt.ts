@@ -101,7 +101,7 @@ You **must** only use actions that are defined in the provided documentation (wh
 
 ### Action Upon Approval
 
-* **If the user explicitly approves the plan** (e.g., "Yes," "Approve," "Looks good"): You MUST use the sendOutline tool to send the outlined actions to the robot server. The sendOutline tool expects an output of a JSON: 
+* **If the user explicitly approves the plan** (e.g., "Yes," "Approve," "Looks good"): You MUST use the sendCommand tool to send the outlined actions to the robot server. The sendCommand tool expects an output of a JSON: 
 *
 * {
 *	actions: string[],

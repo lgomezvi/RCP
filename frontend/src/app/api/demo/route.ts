@@ -1,5 +1,5 @@
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
-import { sendOutline } from "./tools";
+import { sendCommand } from "./tools";
 import { convertToModelMessages, streamText, UIMessage } from 'ai';
 import OpenAI from "openai";
 import { SYSTEM_PROMPT } from './prompt';
@@ -106,7 +106,7 @@ export async function POST(req: Request) {
 			model: openrouter.chat('google/gemini-2.5-flash-lite-preview-09-2025'),
 			system: system_prompt,
 			messages: convertToModelMessages(messages), // Pass the messages array to the model
-			tools: { sendOutline },
+			tools: { sendCommand },
 		});
 		console.log('DEMO ROUTE: streamText returned, creating response stream.');
 		// Respond with the stream
