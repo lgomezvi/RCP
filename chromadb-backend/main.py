@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from .chroma import get_chroma_collection
 import json
+import math
 
 app = Flask(__name__)
 
@@ -96,13 +97,22 @@ def query_documents():
         documents = []
         for i in range(len(results['ids'][0])):
             metadata = results['metadatas'][0][i]
+            distance = results['distances'][0][i]
+            
+            # Calculate similarity metrics based on distance type
+            similarity_metrics = calculate_similarity_metrics(distance)
             
             # Reconstruct the original JSON format
             action_record = {
                 "id": results['ids'][0][i],
-                "action": metadata.get('action'),
-                "parameters": json.loads(metadata.get('parameters', '{}')),
-                "distance": results['distances'][0][i],
+                # "action": metadata.get('action'),
+                # "parameters": json.loads(metadata.get('parameters', '{}')),
+                # "distance": round(distance, 4),
+                "cosine_similarity": similarity_metrics['cosine_similarity'],
+                # "angle_degrees": similarity_metrics['angle_degrees'],
+                # "angle_radians": similarity_metrics['angle_radians'],
+                # "confidence_percentage": similarity_metrics['confidence_percentage'],
+                # "confidence_level": similarity_metrics['confidence_level'],
                 "document_text": results['documents'][0][i]
             }
             documents.append(action_record)
@@ -116,6 +126,54 @@ def query_documents():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+def calculate_similarity_metrics(distance):
+    """
+    Calculate various similarity metrics from ChromaDB distance.
+    
+    ChromaDB default uses L2 (Euclidean) distance for normalized vectors.
+    For normalized vectors: cosine_similarity = 1 - (distance^2 / 2)
+    Angle = arccos(cosine_similarity)
+    """
+    # Convert L2 distance to cosine similarity
+    # For normalized vectors: ||a-b||^2 = 2(1 - cos(θ))
+    # Therefore: cos(θ) = 1 - (distance^2 / 2)
+    cosine_similarity = 1 - (distance ** 2 / 2)
+    
+    # Clamp to valid range [-1, 1] to avoid numerical errors
+    cosine_similarity = max(-1, min(1, cosine_similarity))
+    
+    # Calculate angle in radians using arccos
+    angle_radians = math.acos(cosine_similarity)
+    
+    # Convert to degrees
+    angle_degrees = math.degrees(angle_radians)
+    
+    # Calculate confidence percentage (0° = 100%, 180° = 0%)
+    confidence_percentage = max(0, min(100, (1 - angle_degrees / 180) * 100))
+    
+    # Determine confidence level
+    confidence_level = get_confidence_level(confidence_percentage)
+    
+    return {
+        'cosine_similarity': round(cosine_similarity, 4),
+        'angle_radians': round(angle_radians, 4),
+        'angle_degrees': round(angle_degrees, 2),
+        'confidence_percentage': round(confidence_percentage, 2),
+        'confidence_level': confidence_level
+    }
+
+def get_confidence_level(confidence_percentage):
+    """Convert confidence percentage to human-readable level"""
+    if confidence_percentage >= 90:
+        return "Very High"
+    elif confidence_percentage >= 75:
+        return "High"
+    elif confidence_percentage >= 60:
+        return "Medium"
+    elif confidence_percentage >= 40:
+        return "Low"
+    else:
+        return "Very Low"
     
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
