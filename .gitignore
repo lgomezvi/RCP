@@ -61,5 +61,7 @@ backend/.env*
 
 .env
 
+__pycache__
+
 chromadb-backend/.env*
 !chromadb/.env.example
