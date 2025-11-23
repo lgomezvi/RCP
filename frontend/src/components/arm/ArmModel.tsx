@@ -22,8 +22,8 @@ const ArmModel = ({ rotations, highlightedMeshes = [] }: ArmModelProps) => {
   const highlightMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: 'yellow',
-        emissive: 'orange',
+        color: 'red',
+        emissive: 'red',
         emissiveIntensity: 0.5,
       }),
     []
@@ -40,6 +40,14 @@ const ArmModel = ({ rotations, highlightedMeshes = [] }: ArmModelProps) => {
     console.log(`Size (Width, Height, Depth): X=${size.x.toFixed(3)}, Y=${size.y.toFixed(3)}, Z=${size.z.toFixed(3)}`);
     console.log(`Center Position: X=${center.x.toFixed(3)}, Y=${center.y.toFixed(3)}, Z=${center.z.toFixed(3)}`);
     console.log(`-----------------------------`);
+
+    console.log("--- All Mesh Names in Model ---");
+    scene.traverse((object) => {
+      if (object instanceof THREE.Mesh) {
+        console.log(object.name);
+      }
+    });
+    console.log("---------------------------------");
   }, [scene]);
 
   useEffect(() => {
@@ -62,6 +70,7 @@ const ArmModel = ({ rotations, highlightedMeshes = [] }: ArmModelProps) => {
         const isHighlighted = originalMaterials.current.has(object.uuid);
 
         if (shouldHighlight && !isHighlighted) {
+          console.log(`Applying highlight to: ${object.name}`);
           originalMaterials.current.set(object.uuid, object.material);
           object.material = highlightMaterial;
         } else if (!shouldHighlight && isHighlighted) {
