@@ -78,10 +78,6 @@
         }
       }
     },
-    {
-      "action": "HOME_POSITIONS",
-      "parameters": {}
-    }
   ],
   "units": {
     "angle": "deg",

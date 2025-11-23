@@ -52,5 +52,6 @@ def action_to_instruction(action):
         model="llama-3.1-8b-instant",
         max_output_tokens=100
     )
+    print(response.output_text)
 
     return response.output_text

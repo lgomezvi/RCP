@@ -102,6 +102,7 @@ def status():
 
 @app.post("/command")
 async def command(cmd: Dict[str, List[str]]):
+    print("Received command:", cmd)
     try:
         import json
         instructions = []
@@ -126,7 +127,8 @@ async def command(cmd: Dict[str, List[str]]):
                     # Parse the cached JSON string to dict
                     try:
                         instruction = json.loads(instruction_text)
-                    except (json.JSONDecodeError, TypeError):
+                    except (json.JSONDecodeError, TypeError) as e:
+                        print(f"Error decoding cached instruction: {e}")
                         instruction = instruction_text
             
             # Generate new instruction using SLM if similarity is too low
@@ -137,7 +139,8 @@ async def command(cmd: Dict[str, List[str]]):
                 # Parse the SLM JSON string to dict
                 try:
                     instruction = json.loads(instruction_text)
-                except (json.JSONDecodeError, TypeError):
+                except (json.JSONDecodeError, TypeError) as e:
+                    print(f"Error decoding SLM instruction: {e}")
                     instruction = instruction_text
                     
                 # TODO: Store the new instruction in ChromaDB for future use
@@ -146,13 +149,13 @@ async def command(cmd: Dict[str, List[str]]):
             
             # Broadcast the instruction to connected WebSocket clients
             instruction_str = json.dumps(instruction) if isinstance(instruction, dict) else instruction
-            await manager.broadcast(instruction_str)
+            # await manager.broadcast(instruction_str)
             execute(arduino, instructions[-1])
-            await manager.broadcast(instructions[-1])
+            await manager.broadcast(str(instructions[-1]))
             
         return {"instructions": instructions}
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f"❌ Error in /command endpoint: {str(e)}")
         import traceback
         traceback.print_exc()
         return JSONResponse(content={"error": str(e)}, status_code=500)

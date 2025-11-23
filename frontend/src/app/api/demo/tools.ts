@@ -5,7 +5,7 @@ export const sendCommand = tool({
 	description: `Sends the user approved actions to the robot`,
 
 	parameters: z.object({
-		actions: z.array(z.string()).describe("An array of strings representing robot actions, derived from the documentation. Each string can contain the action name and a corresponding degree value, for example: 'HOME_POSITIONS' or 'ROTATE_BASE 180 DEGREES'."),
+		actions: z.array(z.string()).describe("An array of strings representing robot actions, derived from the documentation. Each string can contain the action name and a corresponding degree value, for example: 'ROTATE_BASE 180 DEGREES'."),
 	}),
 
 	execute: async ({ actions }) => {

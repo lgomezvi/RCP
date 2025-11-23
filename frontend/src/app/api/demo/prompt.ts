@@ -77,9 +77,6 @@ You **must** only use actions that are defined in the provided documentation (wh
     {
       "action": "MOVE_AXIS",
     },
-    {
-      "action": "HOME_POSITIONS",
-    },
   ],
   "units": {
     "angle": "deg",
