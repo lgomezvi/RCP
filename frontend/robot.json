@@ -77,7 +77,7 @@
           "default": 20
         }
       }
-    },
+    }
   ],
   "units": {
     "angle": "deg",

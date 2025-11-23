@@ -59,9 +59,11 @@ async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
     try:
         while True:
-            await asyncio.sleep(60)  # Keeps the coroutine alive
+            # Keep the connection alive and detect client disconnects
+            await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket)
+        print("Client disconnected from /ws endpoint")
 
 
 @app.get("/")
@@ -141,17 +143,20 @@ async def command(cmd: Dict[str, List[str]]):
                     instruction = json.loads(instruction_text)
                 except (json.JSONDecodeError, TypeError) as e:
                     print(f"Error decoding SLM instruction: {e}")
-                    instruction = instruction_text
+                    instruction = None # Set to None on failure
                     
                 # TODO: Store the new instruction in ChromaDB for future use
+
+            # If instruction is still None or not a dict, skip it
+            if not isinstance(instruction, dict):
+                print(f"Skipping invalid instruction: {instruction}")
+                continue
             
             instructions.append(instruction)
             
-            # Broadcast the instruction to connected WebSocket clients
-            instruction_str = json.dumps(instruction) if isinstance(instruction, dict) else instruction
-            # await manager.broadcast(instruction_str)
-            execute(arduino, instructions[-1])
-            await manager.broadcast(str(instructions[-1]))
+            # Execute and broadcast the instruction
+            execute(arduino, instruction)
+            await manager.broadcast(str(instruction))
             
         return {"instructions": instructions}
     except Exception as e:
