@@ -1,4 +1,4 @@
-# Robot Context Protocol (RCP) 🤖
+# Reptile Context Protocol (RCP) 🤖
 
 > A hardware-independent protocol that gives LLMs the ability to control any robot using natural language.
 
