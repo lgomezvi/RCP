@@ -1,20 +1,22 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { DefaultChatTransport } from 'ai';
 
 // A new component for the welcome screen
 const WelcomeScreen = () => (
-  <div className="flex flex-col justify-center items-center h-full text-center text-gray-500 dark:text-gray-400">
+  <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 dark:text-gray-400">
     <div className="max-w-md">
+      <h2 className="text-2xl font-semibold mb-2">Reptile Calibration AI</h2>
       <p className="mb-6">Start the conversation by asking a question below.</p>
       <div className="grid grid-cols-2 gap-4 text-sm">
-        <div className="p-4 rounded-lg border dark:border-gray-600">
-          <h3 className="mb-1 font-semibold">Example Prompt 1</h3>
+        <div className="p-4 border rounded-lg dark:border-gray-600">
+          <h3 className="font-semibold mb-1">Example Prompt 1</h3>
           <p>What are the key differences between a python and a boa?</p>
         </div>
-        <div className="p-4 rounded-lg border dark:border-gray-600">
-          <h3 className="mb-1 font-semibold">Example Prompt 2</h3>
+        <div className="p-4 border rounded-lg dark:border-gray-600">
+          <h3 className="font-semibold mb-1">Example Prompt 2</h3>
           <p>Tell me about the habitat of the Komodo dragon.</p>
         </div>
       </div>
@@ -40,10 +42,19 @@ const StatusDisplay = ({ status }) => {
 
 export default function Chat() {
   const [input, setInput] = useState('');
-  const { messages, sendMessage, status } = useChat();
+  const { messages, sendMessage, status } = useChat({
+		transport: new DefaultChatTransport({
+			api: '/api/demo',
+		}),
+	});
   const [chatStatus, setChatStatus] = useState('ready');
 
-  useEffect(() => {
+  const onPartialChange = useCallback((text: string) => {
+    console.log('Transcribed speech:', text);
+    setInput(text);
+  }, []);
+
+ useEffect(() => {
     setChatStatus(status);
   }, [status]);
 
@@ -102,7 +113,7 @@ export default function Chat() {
           className="flex items-center mx-auto max-w-2xl"
         >
           <input
-            className="flex-1 p-3 rounded-lg border transition-shadow dark:text-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none"
+            className="flex-1 p-4 rounded-lg border transition-shadow dark:text-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none"
             value={input}
             placeholder="Ask me anything..."
             onChange={e => setInput(e.currentTarget.value)}
