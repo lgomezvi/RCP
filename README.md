@@ -43,9 +43,7 @@ User Command → Planning Agent (LLM) → Execution Agent (SLM) → RCP Server (
 - **Communication**: WebSocket (sensor streaming), HTTP (commands)
 
 ### Hardware
-- **Controller**: Orange Pi (RCP server)
 - **Actuators**: Arduino + servo motors
-- **Sensors**: Gripper force sensors, LiDAR
 
 # Project Setup
 
