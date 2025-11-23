@@ -61,3 +61,5 @@ backend/.env*
 
 .env
 
+chromadb-backend/.env*
+!chromadb/.env.example
