@@ -95,7 +95,22 @@ export default function Conversation() {
   }, [conversation]);
 
   return (
-    <div className="flex flex-col gap-4 items-center">
+    <div className="flex flex-col justify-between gap-4 items-center h-full">
+      <div className="w-full max-w-md bg-gray-800 bg-opacity-75 p-4 rounded-lg text-white flex justify-between items-center">
+        <p>Status: {conversation.status}</p>
+        <p>Agent is {conversation.isSpeaking ? 'speaking' : 'listening'}</p>
+      </div>
+
+      <div className="overflow-y-auto p-4 w-full max-w-md h-64 rounded border border-gray-300">
+        {messages.map((msg) => (
+          <div key={msg.id} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+            <span className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-blue-100' : 'bg-gray-100'}`}>
+              {msg.content}
+            </span>
+          </div>
+        ))}
+      </div>
+
       <div className="flex gap-2">
         <button
           onClick={startConversation}
@@ -111,21 +126,6 @@ export default function Conversation() {
         >
           Stop Conversation
         </button>
-      </div>
-
-      <div className="flex flex-col items-center">
-        <p>Status: {conversation.status}</p>
-        <p>Agent is {conversation.isSpeaking ? 'speaking' : 'listening'}</p>
-      </div>
-
-      <div className="overflow-y-auto p-4 w-full max-w-md h-64 rounded border border-gray-300">
-        {messages.map((msg) => (
-          <div key={msg.id} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-            <span className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-              {msg.content}
-            </span>
-          </div>
-        ))}
       </div>
     </div>
   );
