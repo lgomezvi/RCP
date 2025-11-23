@@ -96,11 +96,11 @@ def status():
 # ===========================
 #  SEND COMMAND TO ROBOT
 # ===========================
+
 @app.post("/command")
-# now we are dircetly inetarcting with the arduino through fastapi and logging eveyrthing
-async def command(cmd: Dict[str, List[str]]): # you pass a string which will be the command to send to the robot
-    # Log the outgoing commandis being done in the send_command function
+async def command(cmd: Dict[str, List[str]]):
     try:
+        import json
         instructions = []
         for action in cmd["actions"]: 
             instruction = None
@@ -116,29 +116,47 @@ async def command(cmd: Dict[str, List[str]]): # you pass a string which will be 
                 
                 # Use cached result if similarity is above threshold
                 if similarity >= SIMILARITY_THRESHOLD:
-                    instruction = best_match.get("document_text")
+                    instruction_text = best_match.get("document_text")
                     use_cache = True
                     print(f"✓ Cache hit for '{action}' (similarity: {similarity:.3f})")
+                    
+                    # Parse the cached JSON string to dict
+                    try:
+                        instruction = json.loads(instruction_text)
+                    except (json.JSONDecodeError, TypeError):
+                        instruction = instruction_text
             
             # Generate new instruction using SLM if similarity is too low
             if instruction is None:
                 print(f"⚡ Generating instruction for '{action}' (similarity: {similarity:.3f})")
-                instruction = action_to_instruction(action)
+                instruction_text = action_to_instruction(action)
+                
+                # Parse the SLM JSON string to dict
+                try:
+                    instruction = json.loads(instruction_text)
+                except (json.JSONDecodeError, TypeError):
+                    instruction = instruction_text
+                    
                 # TODO: Store the new instruction in ChromaDB for future use
             
             instructions.append({
                 "action": action,
-                "instruction": instruction,
+                "instruction": instruction,  # Now a dict instead of string
                 "from_cache": use_cache,
                 "similarity": similarity
             })
             
             # Broadcast the instruction to connected WebSocket clients
-            await manager.broadcast(instruction)
+            instruction_str = json.dumps(instruction) if isinstance(instruction, dict) else instruction
+            await manager.broadcast(instruction_str)
             
         return {"instructions": instructions}
     except Exception as e:
+        print(f"❌ Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
 
 
 # from backend.robot_controller import move_joint
