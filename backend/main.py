@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, WebSocket # main class that creates web app 
+from fastapi import FastAPI, APIRouter, WebSocket, WebSocketDisconnect # main class that creates web app 
 from fastapi.responses import JSONResponse # to return JSON responses with custom status codes
 
 from backend.db import get_recent_events, get_robot_state, log_event
@@ -8,14 +8,15 @@ from typing import List, Dict
 from backend.ai.instruction import action_to_instruction
 
 import asyncio
+import requests
+import os
 
 #uvicorn is a lightweight ASGI server to run FastAPI apps, basically it hosts the app
 app = FastAPI()
 
-# Global variables for arm control
-ser = None
-ikSolver = None
-arm_ready = False
+# ChromaDB backend configuration
+CHROMADB_BASE_URL = os.getenv("CHROMADB_BASE_URL", "http://localhost:5000")
+SIMILARITY_THRESHOLD = 0.85
 
 class ConnectionManager:
     def __init__(self):
@@ -33,6 +34,22 @@ class ConnectionManager:
             await connection.send_text(message)
 
 manager = ConnectionManager()
+
+def query_chromadb(action: str, n_results: int = 1) -> Dict:
+    """
+    Query ChromaDB for similar actions.
+    Returns the query results including cosine similarity.
+    """
+    try:
+        response = requests.get(
+            f"{CHROMADB_BASE_URL}/api/query/",
+            params={"query": action, "n_results": n_results}
+        )
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        print(f"Error querying ChromaDB: {e}")
+        return None
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -86,11 +103,38 @@ async def command(cmd: Dict[str, List[str]]): # you pass a string which will be 
     try:
         instructions = []
         for action in cmd["actions"]: 
-            # TODO vector db caching layer
-            instructions.append(action_to_instruction(action))
-            # TODO measure confidence of slm output
-            # TODO LLM+sensor context call
-            await manager.broadcast(instructions[-1])
+            instruction = None
+            use_cache = False
+            similarity = 0.0
+            
+            # Query ChromaDB for similar actions (vector db caching layer)
+            chroma_result = query_chromadb(action)
+            
+            if chroma_result and chroma_result.get("results"):
+                best_match = chroma_result["results"][0]
+                similarity = best_match.get("cosine_similarity", 0.0)
+                
+                # Use cached result if similarity is above threshold
+                if similarity >= SIMILARITY_THRESHOLD:
+                    instruction = best_match.get("document_text")
+                    use_cache = True
+                    print(f"✓ Cache hit for '{action}' (similarity: {similarity:.3f})")
+            
+            # Generate new instruction using SLM if similarity is too low
+            if instruction is None:
+                print(f"⚡ Generating instruction for '{action}' (similarity: {similarity:.3f})")
+                instruction = action_to_instruction(action)
+                # TODO: Store the new instruction in ChromaDB for future use
+            
+            instructions.append({
+                "action": action,
+                "instruction": instruction,
+                "from_cache": use_cache,
+                "similarity": similarity
+            })
+            
+            # Broadcast the instruction to connected WebSocket clients
+            await manager.broadcast(instruction)
             
         return {"instructions": instructions}
     except Exception as e:
