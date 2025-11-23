@@ -104,12 +104,12 @@ from serial import Serial
 import time
 import os
 
-arduino = Serial(port=os.getenv("ARDUINO_LOCATION"), baudrate=9600, timeout=1) 
+arduino = Serial(port=os.getenv("ARDUINO_LOCATION"), baudrate=115200, timeout=1) 
 time.sleep(2)  # wait for Arduino to reset
 
 def send_angle(angle: int):
-    arduino.write(f"{angle}\n".encode())  # send command
+    arduino.write(f"3 {angle}".encode())  # send command
     response = arduino.readline().decode().strip()
     print("Arduino response:", response)
 
-send_angle(30)
+send_angle(0)
