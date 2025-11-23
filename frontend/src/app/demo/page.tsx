@@ -7,12 +7,12 @@ import ArmView from "@/components/arm/ArmView";
 export default function Page() {
   return (
     <div className="grid grid-cols-3 gap-0 h-screen bg-background">
-      <div className="col-span-2 border-r-4 border-input">
+      <div className="col-span-2 border-r-2 border-input">
 {/*		<Chat /> */}
 				<Conversation />
 	</div>
       <div className="grid grid-rows-2 gap-0">
-        <div className="border-b-4 bg-card border-input">
+        <div className="border-b-2 bg-card border-input">
 		<ArmView />
 	</div>
         <div className="flex justify-center items-center bg-card flex-cols">

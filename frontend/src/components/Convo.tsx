@@ -4,6 +4,7 @@ import { useConversation } from "@elevenlabs/react";
 import { useCallback, useState } from "react"; 
 import SendHorizontalIcon from "./SendHorizontalIcon";
 import CirclePauseIcon from "./CirclePauseIcon"; 
+import Visualizer from "./AudioVisualizer"; 
 
 interface Message {
   id: string;
@@ -98,9 +99,10 @@ export default function Conversation() {
 
   return (
     <div className="flex flex-col justify-between items-center w-full h-full bg-background">
-      <div className="flex justify-between items-center p-2 w-full text-foreground bg-card">
-        <p>Status: {conversation.status}</p>
-        <p>Agent {conversation.isSpeaking ? 'Speaking' : 'Listening'}</p>
+      <div className="flex justify-between items-center p-4 w-full rounded-lg text-foreground bg-card">
+        <div className={`${isConnected ? 'bg-[oklch(0.85_0.15_140)]' : 'bg-[oklch(0.25_0.005_270)]'} bg-opacity-50 rounded-md p-1 px-2 border border-white`}>
+          <p className={`${isConnected ? 'text-foreground' : 'text-gray-400'}`}>• {isConnected ? 'Online' : 'Offline'}</p>
+        </div>
         <button
           onClick={isConnected ? stopConversation : startConversation}
           disabled={conversation.status === 'connecting' || conversation.status === 'disconnecting'}
@@ -110,7 +112,7 @@ export default function Conversation() {
         </button>
       </div>
 
-      <div className="overflow-y-auto p-4 w-full flex-grow max-h-[calc(100%-12rem)] border-t border-b border-input">
+      <div className="overflow-y-auto w-full rounded h-100">
         {messages.map((msg) => (
           <div key={msg.id} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
             <span className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-gray-700 text-foreground' : 'bg-gray-800 text-foreground'}`}>
@@ -121,7 +123,7 @@ export default function Conversation() {
       </div>
 
       <div className="flex w-full">
-        <div className="mx-auto w-full h-32 bg-accent"></div>
+        <Visualizer className="mx-auto w-full h-32 bg-accent rounded" />
       </div> 
     </div>
   );
