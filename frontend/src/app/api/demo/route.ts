@@ -1,7 +1,8 @@
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { getWeather } from "./tools";
 import { convertToModelMessages, streamText, UIMessage } from 'ai';
 import OpenAI from "openai";
-
+import { SYSTEM_PROMPT } from './prompt';
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
@@ -97,11 +98,13 @@ export async function POST(req: Request) {
 						headers: { 'Content-Type': 'application/json' },
 					});
 				} */
+		const system_prompt = SYSTEM_PROMPT;
 
-		// 3b. If it is safe, proceed to query the main LLM
 		const result = await streamText({
 			model: openrouter.chat('google/gemini-2.5-flash-lite-preview-09-2025'),
+			system: system_prompt,
 			messages: convertToModelMessages(messages), // Pass the messages array to the model
+			tools: { getWeather },
 		});
 
 		// Respond with the stream

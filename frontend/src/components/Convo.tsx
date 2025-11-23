@@ -139,9 +139,9 @@ export default function Conversation() {
         ))}
       </div>
 
-      <div className="flex w-full">
+{/*      <div className="flex w-full">
         <Visualizer className="mx-auto w-full h-32 rounded" startVisualizerTrigger={isConnected} />
-      </div> 
+      </div>  */} 
     </div>
   );
 }

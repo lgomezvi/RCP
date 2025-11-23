@@ -1,5 +1,5 @@
-//import Chat from "@/components/DemoChat";
-import Conversation from "@/components/Convo";
+import Chat from "@/components/DemoChat";
+//import Conversation from "@/components/Convo";
 import StreamingTerminal from "@/components/StreamingTerminal";
 import ArmView from "@/components/arm/ArmView";
 
@@ -8,8 +8,7 @@ export default function Page() {
   return (
     <div className="grid grid-cols-3 gap-0 h-screen bg-background">
       <div className="col-span-2 border-r-2 border-input">
-{/*		<Chat /> */}
-				<Conversation />
+		<Chat /> 
 	</div>
       <div className="grid grid-rows-2 gap-0">
         <div className="border-b-2 bg-card border-input">
