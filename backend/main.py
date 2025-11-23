@@ -164,4 +164,3 @@ async def command(cmd: Dict[str, List[str]]):
 # def move(joint: str, angle: int):
 #     return move_joint(joint, angle)
 
-        
