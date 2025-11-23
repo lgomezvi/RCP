@@ -2,8 +2,15 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-const Visualizer = ({ className }: { className?: string }) => {
-  const [isRecording, setIsRecording] = useState(false);
+interface VisualizerProps {
+  className?: string;
+  onStart?: () => void;
+  onStop?: () => void;
+  startVisualizerTrigger?: boolean; // New prop to trigger start from parent
+}
+
+const Visualizer = ({ className, onStart, onStop, startVisualizerTrigger }: VisualizerProps) => {
+  const [isVisualizing, setIsVisualizing] = useState(false); // Renamed from isRecording
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const dataArrayRef = useRef<Uint8Array | null>(null);
@@ -43,7 +50,7 @@ const Visualizer = ({ className }: { className?: string }) => {
 
       x += barWidth + 1; // Space between bars
     }
-  }, [analyserRef, canvasRef, dataArrayRef]); // Add dependencies
+  }, [analyserRef, canvasRef, dataArrayRef]);
 
   const setupAudioContext = useCallback(async () => {
     try {
@@ -64,13 +71,14 @@ const Visualizer = ({ className }: { className?: string }) => {
       const bufferLength = analyser.frequencyBinCount;
       dataArrayRef.current = new Uint8Array(bufferLength);
 
-      setIsRecording(true);
+      setIsVisualizing(true);
       drawVisualization();
+      onStart && onStart(); // Notify parent
     } catch (error) {
       console.error('Error accessing microphone:', error);
-      setIsRecording(false);
+      setIsVisualizing(false);
     }
-  }, [drawVisualization]); // Add drawVisualization as a dependency
+  }, [drawVisualization, onStart]);
 
   const stopAudioContext = useCallback(() => {
     if (animationFrameIdRef.current) {
@@ -84,24 +92,30 @@ const Visualizer = ({ className }: { className?: string }) => {
       audioContextRef.current.close();
       audioContextRef.current = null;
     }
-    setIsRecording(false);
-  }, []);
+    setIsVisualizing(false);
+    onStop && onStop(); // Notify parent
+  }, [onStop]);
 
+  // Effect to handle external trigger for starting/stopping visualizer
   useEffect(() => {
-    setupAudioContext();
+    if (startVisualizerTrigger && !isVisualizing) {
+      setupAudioContext();
+    } else if (!startVisualizerTrigger && isVisualizing) {
+      stopAudioContext();
+    }
+  }, [startVisualizerTrigger, isVisualizing, setupAudioContext, stopAudioContext]);
+
+
+  // Cleanup on component unmount
+  useEffect(() => {
     return () => {
       stopAudioContext();
     };
-  }, [setupAudioContext, stopAudioContext]);
+  }, [stopAudioContext]);
 
   return (
     <div className={className}>
-      <div className="flex gap-2 mb-4">
-        <button onClick={stopAudioContext} disabled={!isRecording} className="py-2 px-4 bg-red-500 text-white rounded">
-          Stop Visualizer
-        </button>
-      </div>
-      {isRecording && (
+      {isVisualizing && (
         <canvas ref={canvasRef} width={500} height={75} style={{ border: '1px solid #f76565' }} />
       )}
     </div>

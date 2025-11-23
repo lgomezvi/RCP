@@ -123,7 +123,7 @@ export default function Conversation() {
       </div>
 
       <div className="flex w-full">
-        <Visualizer className="mx-auto w-full h-32 bg-accent rounded" />
+        <Visualizer className="mx-auto w-full h-32 bg-accent rounded" startVisualizerTrigger={isConnected} />
       </div> 
     </div>
   );
