@@ -18,7 +18,7 @@ export default function StreamingTerminal() {
   }, []);
 
   return (
-    <div className="overflow-y-auto p-4 w-full h-full bg-gray-600">
+    <div className="overflow-y-auto p-4 w-full h-full bg-card text-foreground">
 	<h1>Hello</h1>
       <pre>{text}</pre>
     </div>

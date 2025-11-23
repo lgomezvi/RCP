@@ -17,7 +17,7 @@ export default function ArmView() {
   const [rotations, setRotations] = useState<ArmRotations>(initialRotations);
 
   return (
-    <div className="relative mx-auto w-full h-full bg-white">
+    <div className="relative mx-auto w-full h-full bg-card">
       <Canvas className="mx-auto w-full h-full"
         camera={{ fov: 75 }}
       >

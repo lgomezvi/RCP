@@ -18,6 +18,14 @@ Instead of programming complex inverse kinematics and motor controls, simply say
 
 The AI agent handles the rest - planning, execution, and adaptation.
 
+
+## TLDR; Demo setup
+
+1. frontend: `cd frontend`, `npm i`, get all environment variables, `npm run dev`, `localhost:3000`
+2. backend (robot server): plug in Arduino serial connection, make `.env` for backend in project root, `cd backend`, `python -m venv .venv`, `source .venv/bin/activate`, `pip install -r requirements.txt`, `cd ..`, `python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload`
+3. vector DB: `cd chromadb-backend`, make `.env` for chromadb, make a .venv for the vector DB, install deps and run `python main.py`.
+
+
 ## 🏗️ Architecture
 
 ### Workflow

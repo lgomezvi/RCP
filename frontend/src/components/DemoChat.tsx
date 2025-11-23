@@ -6,16 +6,16 @@ import { DefaultChatTransport } from 'ai';
 
 // A new component for the welcome screen
 const WelcomeScreen = () => (
-  <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 dark:text-gray-400">
+  <div className="flex flex-col items-center justify-center h-full text-center text-foreground">
     <div className="max-w-md">
       <h2 className="text-2xl font-semibold mb-2">Reptile Calibration AI</h2>
       <p className="mb-6">Start the conversation by asking a question below.</p>
       <div className="grid grid-cols-2 gap-4 text-sm">
-        <div className="p-4 border rounded-lg dark:border-gray-600">
+        <div className="p-4 border border-input rounded-lg">
           <h3 className="font-semibold mb-1">Example Prompt 1</h3>
           <p>What are the key differences between a python and a boa?</p>
         </div>
-        <div className="p-4 border rounded-lg dark:border-gray-600">
+        <div className="p-4 border border-input rounded-lg">
           <h3 className="font-semibold mb-1">Example Prompt 2</h3>
           <p>Tell me about the habitat of the Komodo dragon.</p>
         </div>
@@ -24,17 +24,17 @@ const WelcomeScreen = () => (
   </div>
 );
 
-const StatusDisplay = ({ status }) => {
+const StatusDisplay = ({ status }: { status: string }) => {
   const statusStyles = {
-    ready: { text: 'Agent Ready', bg: 'text-lime-500' },
-    submitted: { text: 'Sent', bg: 'text-yellow-500' },
-    error: { text: 'Error', bg: 'text-red-500' },
+    ready: { text: 'Agent Ready', bg: 'text-secondary' },
+    submitted: { text: 'Sent', bg: 'text-primary' },
+    error: { text: 'Error', bg: 'text-destructive' },
   };
 
   const currentStatus = statusStyles[status] || statusStyles.ready;
 
   return (
-    <h1 className={`text-xl font-bold text-center rounded-md ${currentStatus.bg}`}>
+    <h1 className={`text-xl font-bold text-foreground text-center rounded-md ${currentStatus.bg}`}>
       {currentStatus.text}
     </h1>
   );
@@ -59,9 +59,9 @@ export default function Chat() {
   }, [status]);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <header className="p-4">
+      <header className="p-4 bg-card rounded-lg">
         <StatusDisplay status={chatStatus} />
       </header>
 
@@ -74,9 +74,9 @@ export default function Chat() {
             {messages.map(message => (
               <div key={message.id} className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {message.role !== 'user' && (
-                  <div className="flex justify-center items-center w-8 h-8 text-xl bg-gray-300 rounded-full dark:bg-gray-600">🤖</div>
+                  <div className="flex justify-center items-center w-8 h-8 text-xl bg-card text-foreground rounded-full">🤖</div>
                 )}
-                <div className={`max-w-lg px-4 py-3 rounded-2xl shadow-md ${message.role === 'user' ? 'bg-blue-500 text-white rounded-br-none' : 'bg-white dark:bg-gray-700 dark:text-gray-200 rounded-bl-none'}`}>
+                <div className={`max-w-lg px-4 py-3 rounded-2xl shadow-md ${message.role === 'user' ? 'bg-primary text-foreground rounded-br-none' : 'bg-secondary text-foreground rounded-bl-none'}`}>
                   {message.parts.map((part, i) => {
                     switch (part.type) {
                       case 'text':
@@ -85,14 +85,14 @@ export default function Chat() {
                   })}
                 </div>
                 {message.role === 'user' && (
-                  <div className="flex justify-center items-center w-8 h-8 text-xl text-white bg-blue-500 rounded-full">👤</div>
+                  <div className="flex justify-center items-center w-8 h-8 text-xl bg-primary text-foreground rounded-full">👤</div>
                 )}
               </div>
             ))}
             {status === 'submitted' && (
               <div className="flex gap-3 justify-start">
-                <div className="flex justify-center items-center w-8 h-8 text-xl bg-gray-300 rounded-full dark:bg-gray-600">🤖</div>
-                <div className="py-3 px-4 max-w-lg bg-white rounded-2xl rounded-bl-none shadow-md dark:text-gray-200 dark:bg-gray-700">
+                <div className="flex justify-center items-center w-8 h-8 text-xl bg-card text-foreground rounded-full">🤖</div>
+                <div className="py-3 px-4 max-w-lg bg-secondary text-foreground rounded-2xl rounded-bl-none shadow-md">
                   <p className="text-sm animate-pulse">...</p>
                 </div>
               </div>
@@ -113,14 +113,14 @@ export default function Chat() {
           className="flex items-center mx-auto max-w-2xl"
         >
           <input
-            className="flex-1 p-4 rounded-lg border transition-shadow dark:text-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none"
+            className="flex-1 p-4 rounded-lg border border-input text-foreground bg-card focus:outline-none"
             value={input}
             placeholder="Ask me anything..."
             onChange={e => setInput(e.currentTarget.value)}
           />
           <button 
             type="submit" 
-            className="py-3 px-5 ml-3 text-white bg-blue-600 rounded-full opacity-75 transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:bg-gray-500" 
+            className="py-3 px-5 ml-3 bg-primary text-foreground rounded-full opacity-75 transition-colors hover:bg-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none disabled:bg-muted" 
             disabled={status !== 'ready' || !input}
           >
             Send

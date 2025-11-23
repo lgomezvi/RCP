@@ -1,11 +1,12 @@
 from openai import OpenAI
 import os
 import sys
+import json
 from dotenv import load_dotenv
 
 load_dotenv()
 
-import json
+
 
 with open("./backend/robot.json", "r") as file:
     robot_capabilities = json.load(file)
@@ -51,5 +52,6 @@ def action_to_instruction(action):
         model="llama-3.1-8b-instant",
         max_output_tokens=100
     )
+    print(response.output_text)
 
     return response.output_text
