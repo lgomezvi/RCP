@@ -6,16 +6,16 @@ import ArmView from "@/components/arm/ArmView";
 
 export default function Page() {
   return (
-    <div className="grid grid-cols-3 gap-0 h-screen">
-      <div className="col-span-2 bg-gray-200 border-r-4 border-black">
+    <div className="grid grid-cols-3 gap-0 h-screen bg-background">
+      <div className="col-span-2 border-r-4 border-input">
 {/*		<Chat /> */}
 				<Conversation />
 	</div>
       <div className="grid grid-rows-2 gap-0">
-        <div className="bg-gray-400 border-b-4 border-black">
+        <div className="border-b-4 bg-card border-input">
 		<ArmView />
 	</div>
-        <div className="flex justify-center items-center bg-gray-600 flex-cols">
+        <div className="flex justify-center items-center bg-card flex-cols">
 			<StreamingTerminal />
 		</div>
       </div>

@@ -2,6 +2,8 @@
 
 import { useConversation } from "@elevenlabs/react";
 import { useCallback, useState } from "react"; 
+import SendHorizontalIcon from "./SendHorizontalIcon";
+import CirclePauseIcon from "./CirclePauseIcon"; 
 
 interface Message {
   id: string;
@@ -95,38 +97,32 @@ export default function Conversation() {
   }, [conversation]);
 
   return (
-    <div className="flex flex-col justify-between gap-4 items-center h-full">
-      <div className="w-full max-w-md bg-gray-800 bg-opacity-75 p-4 rounded-lg text-white flex justify-between items-center">
+    <div className="flex flex-col justify-between items-center w-full h-full bg-background">
+      <div className="flex justify-between items-center p-4 w-full rounded-lg text-foreground bg-card">
         <p>Status: {conversation.status}</p>
-        <p>Agent is {conversation.isSpeaking ? 'speaking' : 'listening'}</p>
+        <p>Agent {conversation.isSpeaking ? 'Speaking' : 'Listening'}</p>
+        <button
+          onClick={isConnected ? stopConversation : startConversation}
+          disabled={conversation.status === 'connecting' || conversation.status === 'disconnecting'}
+          className={`p-2 rounded-full ${isConnected ? 'bg-destructive text-foreground' : 'bg-primary text-foreground'} disabled:bg-muted`}
+        >
+          {isConnected ? <CirclePauseIcon /> : <SendHorizontalIcon />}
+        </button>
       </div>
 
-      <div className="overflow-y-auto p-4 w-full max-w-md h-64 rounded border border-gray-300">
+      <div className="overflow-y-auto p-4 w-full flex-grow max-h-[calc(100%-12rem)] rounded border border-input mt-4">
         {messages.map((msg) => (
           <div key={msg.id} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-            <span className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-blue-100' : 'bg-gray-100'}`}>
+            <span className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-primary text-foreground' : 'bg-secondary text-foreground'}`}>
               {msg.content}
             </span>
           </div>
         ))}
       </div>
 
-      <div className="flex gap-2">
-        <button
-          onClick={startConversation}
-          disabled={isConnected}
-          className="py-2 px-4 text-white bg-blue-500 rounded disabled:bg-gray-300"
-        >
-          Start Conversation
-        </button>
-        <button
-          onClick={stopConversation}
-          disabled={!isConnected}
-          className="py-2 px-4 text-white bg-red-500 rounded disabled:bg-gray-300"
-        >
-          Stop Conversation
-        </button>
-      </div>
+      <div className="flex w-full mt-4">
+        <div className="mx-auto w-full h-32 bg-accent rounded"></div>
+      </div> 
     </div>
   );
 }
