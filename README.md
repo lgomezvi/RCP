@@ -115,3 +115,13 @@ Run frontend:
 
 Run ChromaDB:
 `python -m uvicorn chromadb-backend.main:app --host 0.0.0.0 --port 8000 --reload`
+
+## ChromaDB setup
+
+From the root repository:
+
+1. `cd chromadb-backend`
+
+2. `pip install -r requirements.txt`
+
+3. `python main.py`
