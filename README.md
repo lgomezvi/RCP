@@ -123,7 +123,6 @@ Run frontend:
 
 Run ChromaDB:
 `python -m uvicorn chromadb-backend.main:app --host 0.0.0.0 --port 8000 --reload`
-<<<<<<< HEAD
 
 ## ChromaDB setup
 
