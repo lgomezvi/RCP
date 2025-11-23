@@ -1,3 +1,4 @@
+import requests 
 from fastapi import FastAPI, APIRouter, WebSocket, WebSocketDisconnect # main class that creates web app 
 from fastapi.responses import JSONResponse # to return JSON responses with custom status codes
 import json
