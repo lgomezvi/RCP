@@ -39,14 +39,15 @@ export default function Conversation() {
         type: message.type || 'final'
       };
       
-      setMessages(prev => [...prev, newMessage]);
+      let shouldAddMessageToState = true;
 
       // Check if the message is a JSON output from the agent
       if (newMessage.role === 'agent') {
         try {
           const parsedContent = JSON.parse(newMessage.content);
           if (parsedContent && parsedContent.status === 'ACK' && Array.isArray(parsedContent.actions)) {
-            console.log('Agent sent approved actions for backend:', parsedContent.actions);
+            console.log('Agent response: ACK. Approved actions for backend:', parsedContent.actions);
+            shouldAddMessageToState = false; // Do not add ACK message to state
 
             // Call the Next.js API endpoint to save the outline
             fetch('/api/save-outline', {
@@ -67,11 +68,20 @@ export default function Conversation() {
               .catch(error => {
                 console.error('Error sending actions to backend:', error);
               });
+          } else if (parsedContent && parsedContent.status === 'NACK') {
+            console.log('Agent response: NACK. Actions not approved.');
+          } else if (parsedContent && parsedContent.actions) {
+            console.log('Agent response: Unknown status or invalid structure, but actions array found.');
+          } else {
+            console.log('Agent response: Not a recognized action JSON format.');
           }
         } catch (error) {
-          // Not a JSON message, or invalid JSON. Continue as normal message.
-          console.log('Agent message is not a valid JSON for backend actions, or status is not ACK.');
+          console.log('Agent message is not a valid JSON for backend actions, continuing as normal message.');
         }
+      }
+
+      if (shouldAddMessageToState) {
+        setMessages(prev => [...prev, newMessage]);
       }
     },
     onError: (error) => console.error('Error:', error),
