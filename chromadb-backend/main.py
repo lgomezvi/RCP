@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from .chroma import get_chroma_collection
+import json
 
 app = Flask(__name__)
 
@@ -7,11 +8,13 @@ app = Flask(__name__)
 def add_documents():
     try:
         request_body = request.get_json()
-        documents = request_body.get('documents')
-        metadatas = request_body.get('metadatas')
         
-        if not documents:
-            return jsonify({"error": "Documents are required"}), 400
+        # Expecting an array of action records
+        # Example: [{"action": "move", "parameters": {...}}, ...]
+        records = request_body.get('records')
+        
+        if not records:
+            return jsonify({"error": "Records are required"}), 400
         
         collection = get_chroma_collection()
         
@@ -22,24 +25,37 @@ def add_documents():
         # Extract numeric IDs and find the maximum
         max_id = 0
         for existing_id in existing_ids:
-            if existing_id.startswith('doc'):
+            if existing_id.startswith('action'):
                 try:
-                    num = int(existing_id[3:])  # Extract number after 'doc'
+                    num = int(existing_id[6:])  # Extract number after 'action'
                     max_id = max(max_id, num)
                 except ValueError:
                     continue
         
         # Generate new sequential IDs
         new_ids = []
-        for i in range(len(documents)):
-            new_ids.append(f"doc{max_id + i + 1}")
+        documents = []
+        metadatas = []
         
-        # Prepare metadatas - ensure each has at least one key
-        if not metadatas or len(metadatas) != len(documents):
-            metadatas = [{"index": i} for i in range(len(documents))]
-        else:
-            # Ensure each metadata dict has at least one key
-            metadatas = [meta if meta else {"index": i} for i, meta in enumerate(metadatas)]
+        for i, record in enumerate(records):
+            new_ids.append(f"action{max_id + i + 1}")
+            
+            # Convert the entire record to a searchable string
+            document_text = f"Action: {record.get('action', 'unknown')}"
+            if 'parameters' in record:
+                params = record['parameters']
+                document_text += f" | Axis: {params.get('axis', 'N/A')}"
+                document_text += f" | Target Angle: {params.get('target_angle_deg', 'N/A')} degrees"
+                document_text += f" | Speed Delay: {params.get('speed_delay_ms', 'N/A')} ms"
+            
+            documents.append(document_text)
+            
+            # Store the full JSON structure in metadata
+            metadatas.append({
+                "action": record.get('action', 'unknown'),
+                "parameters": json.dumps(record.get('parameters', {})),
+                "record_type": "robot_action"
+            })
         
         # Add documents with auto-generated IDs
         collection.add(
@@ -49,7 +65,7 @@ def add_documents():
         )
         
         response = {
-            "message": "Documents added successfully",
+            "message": "Action records added successfully",
             "ids": new_ids,
             "count": len(new_ids)
         }
@@ -63,7 +79,7 @@ def query_documents():
     try:
         # Get query parameters from URL
         query_text = request.args.get('query')
-        n_results = request.args.get('n_results', default=5, type=int)
+        n_results = request.args.get('n_results', default=1, type=int)
         
         if not query_text:
             return jsonify({"error": "Query text is required"}), 400
@@ -76,15 +92,20 @@ def query_documents():
             n_results=n_results
         )
         
-        # Format the response
+        # Format the response with reconstructed JSON
         documents = []
         for i in range(len(results['ids'][0])):
-            documents.append({
+            metadata = results['metadatas'][0][i]
+            
+            # Reconstruct the original JSON format
+            action_record = {
                 "id": results['ids'][0][i],
-                "document": results['documents'][0][i],
-                "metadata": results['metadatas'][0][i],
-                "distance": results['distances'][0][i]
-            })
+                "action": metadata.get('action'),
+                "parameters": json.loads(metadata.get('parameters', '{}')),
+                "distance": results['distances'][0][i],
+                "document_text": results['documents'][0][i]
+            }
+            documents.append(action_record)
         
         return jsonify({
             "query": query_text,
