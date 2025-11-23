@@ -112,8 +112,8 @@ joints = {
     "shoulder": 3,
     "elbow": 5,
     "wrist_roll": 11,
-    "wrist_pitch": 9,
-    "gripper": 10,
+    "wrist_pitch": 10,
+    "gripper": 9,
 }
 
 def open_arduino():

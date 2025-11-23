@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import ArmModel from "./ArmModel";
-import Controls from "./controls";
 import { ArmRotations } from "./types";
 import { armConfig } from "./arm-config";
 
@@ -19,6 +18,7 @@ export default function ArmView({ highlightedMeshes }: ArmViewProps) {
   }, {} as ArmRotations);
 
   const [rotations, setRotations] = useState<ArmRotations>(initialRotations);
+  const [isRotating, setIsRotating] = useState(true);
 
   return (
     <div className="relative mx-auto w-full h-full bg-card">
@@ -30,12 +30,17 @@ export default function ArmView({ highlightedMeshes }: ArmViewProps) {
           alignment="bottom-right"
           margin={[80, 80]}
         >
-          <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
         </GizmoHelper>
-        <ArmModel rotations={rotations} highlightedMeshes={highlightedMeshes} />
-        <OrbitControls />
+        <ArmModel 
+          rotations={rotations} 
+          highlightedMeshes={highlightedMeshes} 
+          isRotating={isRotating}
+        />
+        <OrbitControls 
+          onStart={() => setIsRotating(false)}
+          onEnd={() => setIsRotating(true)}
+        />
       </Canvas>
-      <Controls setRotations={setRotations} />
     </div>
   );
 }

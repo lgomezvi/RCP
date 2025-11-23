@@ -1,6 +1,6 @@
 'use client';
 
-import { useLoader } from '@react-three/fiber'
+import { useLoader, useFrame } from '@react-three/fiber'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
@@ -12,9 +12,10 @@ import { armConfig } from './arm-config'; // Import armConfig
 interface ArmModelProps {
   rotations: ArmRotations;
   highlightedMeshes?: string[];
+  isRotating?: boolean;
 }
 
-const ArmModel = ({ rotations, highlightedMeshes = [] }: ArmModelProps) => {
+const ArmModel = ({ rotations, highlightedMeshes = [], isRotating = true }: ArmModelProps) => {
   const gltf = useLoader(GLTFLoader, '/testarm.glb');
   const scene = gltf.scene;
   const originalMaterials = useRef(new Map<string, THREE.Material>());
@@ -28,6 +29,14 @@ const ArmModel = ({ rotations, highlightedMeshes = [] }: ArmModelProps) => {
       }),
     []
   );
+
+  const modelRef = useRef<THREE.Group>(null);
+
+  useFrame((state, delta) => {
+    if (modelRef.current && isRotating) {
+      modelRef.current.rotation.y += delta * 0.15;
+    }
+  });
 
   useEffect(() => {
     const box = new THREE.Box3().setFromObject(scene);
@@ -83,7 +92,7 @@ const ArmModel = ({ rotations, highlightedMeshes = [] }: ArmModelProps) => {
 
   return (
     <Center>
-      <group>
+      <group ref={modelRef}>
         <primitive object={scene} scale={0.02} />
       </group>
     </Center>
