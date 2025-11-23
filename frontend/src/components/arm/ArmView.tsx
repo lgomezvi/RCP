@@ -8,7 +8,11 @@ import Controls from "./controls";
 import { ArmRotations } from "./types";
 import { armConfig } from "./arm-config";
 
-export default function ArmView() {
+interface ArmViewProps {
+  highlightedMeshes?: string[];
+}
+
+export default function ArmView({ highlightedMeshes }: ArmViewProps) {
   const initialRotations: ArmRotations = armConfig.reduce((acc, joint) => {
     acc[joint.name] = 0;
     return acc;
@@ -28,7 +32,7 @@ export default function ArmView() {
         >
           <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
         </GizmoHelper>
-        <ArmModel rotations={rotations} />
+        <ArmModel rotations={rotations} highlightedMeshes={highlightedMeshes} />
         <OrbitControls />
       </Canvas>
       <Controls setRotations={setRotations} />

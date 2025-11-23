@@ -1,26 +1,13 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+interface StreamingTerminalProps {
+  text: string;
+}
 
-export default function StreamingTerminal() {
-  const [text, setText] = useState('');
-
-  useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8000/ws');
-
-    ws.onmessage = (event) => {
-      setText((prevText) => prevText + event.data + '\n');
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, []);
-
+export default function StreamingTerminal({ text }: StreamingTerminalProps) {
   return (
-    <div className="overflow-y-auto p-4 w-full h-full bg-card text-foreground">
-	<h1>Hello</h1>
-      <pre>{text}</pre>
+    <div className="overflow-y-auto p-4 w-full h-full bg-red-700 bg-card text-foreground">
+      <pre className="font-bold text-center text:md">{text}</pre>
     </div>
   );
 }

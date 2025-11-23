@@ -1,47 +1,47 @@
 # Model Meshes
 
-- nodes14
-- nodes15
-- Arm_02_v3_node
-- Arm_03_node
-- Base_node
-- gear1
-- gear2
-- grip_link_1
-- grip_link_1_node
-- grip_link_1_node_0
-- grip_link_1_node_1
-- Gripper_1
-- Gripper_1_node
-- Gripper_base
-- nodes47
-- nodes48
-- nodes49
-- nodes50
-- nodes51
-- nodes52
-- nodes2
-- nodes3
-- nodes4
-- nodes5
-- nodes10
-- nodes11
-- nodes12
-- nodes9
-- nodes24
-- nodes25
-- nodes26
-- nodes27
-- nodes17
-- nodes18
-- nodes19
-- nodes20
-- nodes21
-- nodes22
-- nodes33
-- nodes34
-- nodes35
-- nodes36
-- nodes37
-- nodes38
-- Waist_node
+- nodes14: BASE 
+- nodes15: BASE 
+- Arm_02_v3_node: ELBOW 
+- Arm_03_node: ELBOW 
+- Base_node: BASE 
+- gear1: GRIPPER 
+- gear2: GRIPPER 
+- grip_link_1: BASE 
+- grip_link_1_node: BASE 
+- grip_link_1_node_0: GRIPPER 
+- grip_link_1_node_1: GRIPPER 
+- Gripper_1: GRIPPER 
+- Gripper_1_node: GRIPPER 
+- Gripper_base: WRIST_ROLL 
+- nodes47: WRIST_ROLL
+- nodes48: WRIST_ROLL
+- nodes49: GRIPPER
+- nodes50: WRIST_ROLL
+- nodes51: WRIST_ROLL
+- nodes52: WRIST_ROLL
+- nodes2: BASE 
+- nodes3: BASE 
+- nodes4:BASE  
+- nodes5: BASE 
+- nodes10: BASE 
+- nodes11: SHOULDER 
+- nodes12: SHOULDER 
+- nodes9: SHOULDER 
+- nodes24: SHOULDER 
+- nodes25: ELBOW 
+- nodes26: ELBOW 
+- nodes27: ELBOW 
+- nodes17: WRIST_ROLL 
+- nodes18: WRIST_PITCH
+- nodes19: WRIST_ROLL
+- nodes20: WRIST_ROLL
+- nodes21: WRIST_ROLL 
+- nodes22: WRIST_ROLL
+- nodes33: GRIPPER 
+- nodes34: GRIPPER 
+- nodes35: WRIST_PITCH
+- nodes36: WRIST_PITCH
+- nodes37: WRIST_PITCH
+- nodes38: GRIPPER
+- Waist_node: BASE 

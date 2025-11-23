@@ -8,8 +8,8 @@ export interface JointConfig {
 }
 
 export const armConfig: JointConfig[] = [
-	{ name: 'Base', label: 'Base', axis: 'y', step: Math.PI / 16 },
+	{ name: 'gear1', label: 'TEST', axis: 'y', step: Math.PI / 16 },
 	{ name: 'Waist', label: 'Waist', axis: 'y', step: Math.PI / 16 },
-	{ name: 'Arm_02_v3', label: 'Shoulder', axis: 'z', step: Math.PI / 16 },
-	{ name: 'nodes14', label: 'Elbow', axis: 'z', step: Math.PI / 16 },
+	{ name: 'Arm_03_node', label: 'Shoulder', axis: 'z', step: Math.PI / 16 },
+	{ name: 'nodes33', label: 'Elbow', axis: 'z', step: Math.PI / 16 },
 ];
