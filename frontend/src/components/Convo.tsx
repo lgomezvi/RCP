@@ -4,7 +4,7 @@ import { useConversation } from "@elevenlabs/react";
 import { useCallback, useState } from "react"; 
 import SendHorizontalIcon from "./SendHorizontalIcon";
 import CirclePauseIcon from "./CirclePauseIcon"; 
-import Visualizer from "./AudioVisualizer"; 
+import Visualizer from "./AudioVisualizer";  
 
 interface Message {
   id: string;
@@ -123,7 +123,7 @@ export default function Conversation() {
       </div>
 
       <div className="flex w-full">
-        <Visualizer className="mx-auto w-full h-32 bg-accent rounded" startVisualizerTrigger={isConnected} />
+        <Visualizer className="mx-auto w-full h-32 rounded" startVisualizerTrigger={isConnected} />
       </div> 
     </div>
   );

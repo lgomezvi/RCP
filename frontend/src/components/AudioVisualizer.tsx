@@ -116,7 +116,7 @@ const Visualizer = ({ className, onStart, onStop, startVisualizerTrigger }: Visu
   return (
     <div className={className}>
       {isVisualizing && (
-        <canvas ref={canvasRef} width={500} height={75} style={{ border: '1px solid #f76565' }} />
+        <canvas ref={canvasRef} className="w-full h-full" style={{ border: '1px solid #f76565' }} />
       )}
     </div>
   );
