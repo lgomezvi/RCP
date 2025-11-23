@@ -1,23 +1,25 @@
-# import serial
+# import serial #from pyserial # might have to pip install this nnot sure if i have it 
 # import threading
 # import time
+# import os
 
 # from backend.db import log_event, update_robot_state
 
-# #note that this will HAVEEE TO BE CHANGED BASED ON THE ARDUINO SPECS AND ARCH LINUX
-# # ================================
-# #  CONFIGURE SERIAL CONNECTION 
-# # ================================
-# # IMPORTANT:
-# # Replace '/dev/ttyUSB0' with your actual Arduino port:
-# # - macOS:     /dev/tty.usbmodemXXXX or /dev/cu.usbserial-XXX
-# # - Windows:   COM3, COM4, etc.
-# # - Linux:     /dev/ttyUSB0 or /dev/ttyACM0
+#note that this will HAVEEE TO BE CHANGED BASED ON THE ARDUINO SPECS AND ARCH LINUX
+# ================================
+#  CONFIGURE SERIAL CONNECTION 
+# ================================
+# IMPORTANT:
+# Replace '/dev/ttyUSB0' with your actual Arduino port:
+# - macOS:     /dev/tty.usbmodemXXXX or /dev/cu.usbserial-XXX
+# - Windows:   COM3, COM4, etc.
+# - Linux:     /dev/ttyUSB0 or /dev/ttyACM0
 
 
 
-# ##3 READ THE PART I SEND FROM ARDUINO TO KNOW WHAT PORT TO USE AND THEN YOU CAN DO THE ARUDINO CODE PART 
-# SERIAL_PORT = "/dev/tty.usbmodem1101"   # <-- you MUST update this
+##3 READ THE PART I SEND FROM ARDUINO TO KNOW WHAT PORT TO USE AND THEN YOU CAN DO THE ARUDINO CODE PART 
+
+# SERIAL_PORT = "/dev/cu.usbmodem2101"
 # BAUD_RATE = 115200
 
 # ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=0.1)
@@ -99,17 +101,3 @@
 #     except Exception as e:
 #         log_event("backend", "error", f"Failed to parse STATE: {message}")
 #         return {}
-
-from serial import Serial
-import time
-import os
-
-arduino = Serial(port=os.getenv("ARDUINO_LOCATION"), baudrate=9600, timeout=1) 
-time.sleep(2)  # wait for Arduino to reset
-
-def send_angle(angle: int):
-    arduino.write(f"{angle}\n".encode())  # send command
-    response = arduino.readline().decode().strip()
-    print("Arduino response:", response)
-
-send_angle(30)

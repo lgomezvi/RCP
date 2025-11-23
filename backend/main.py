@@ -69,3 +69,14 @@ def command(cmd: Dict[str, List[str]]): # you pass a string which will be the co
         return {"instructions": instructions}
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+from backend.robot_controller import move_joint
+
+@app.post("/move")
+def move(joint: str, angle: int):
+    return move_joint(joint, angle)
+
+
+
+        
