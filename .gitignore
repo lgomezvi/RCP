@@ -57,6 +57,11 @@ backend/*.egg-info
 backend/.venv
 backend/venv
 backend/robot.db
+backend/.env*
 
 .env
 
+__pycache__
+
+chromadb-backend/.env*
+!chromadb/.env.example

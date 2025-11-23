@@ -40,9 +40,8 @@ export default function Home() {
 					Robot Context Protocol 
 				</GlitchText>
 				<div className="flex gap-8 mt-10">
-					<Link href="/calibrating" className="text-xl font-bold text-white transition-transform md:text-2xl lg:text-3xl hover:underline hover:scale-110">Calibrating</Link>
 					<Link href="/demo" className="text-xl font-bold text-white transition-transform md:text-2xl lg:text-3xl hover:underline hover:scale-110">Demo</Link>
-					<Link href="/presentation" className="text-xl font-bold text-white transition-transform md:text-2xl lg:text-3xl hover:underline hover:scale-110">What is It?</Link>
+					<Link href="https://docs.google.com/presentation/d/1FNUHW64UcBfgw4VFNOTcl_KeRpKZKrhOorr7sT0gYnw/edit?slide=id.g8794a74c9d_0_2475#slide=id.g8794a74c9d_0_2475" className="text-xl font-bold text-white transition-transform md:text-2xl lg:text-3xl hover:underline hover:scale-110">What is It?</Link>
 
 				</div>
 			</div>
