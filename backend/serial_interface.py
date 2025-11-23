@@ -101,3 +101,17 @@
 #     except Exception as e:
 #         log_event("backend", "error", f"Failed to parse STATE: {message}")
 #         return {}
+
+from serial import Serial
+import time
+import os
+
+arduino = Serial(port=os.getenv("ARDUINO_LOCATION"), baudrate=115200, timeout=1) 
+time.sleep(2)  # wait for Arduino to reset
+
+def send_angle(angle: int):
+    arduino.write(f"3 {angle}".encode())  # send command
+    response = arduino.readline().decode().strip()
+    print("Arduino response:", response)
+
+send_angle(0)
