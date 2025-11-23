@@ -41,30 +41,37 @@ export default function Conversation() {
       
       setMessages(prev => [...prev, newMessage]);
 
-      // Check if the message starts with <SEND> tag
-      if (newMessage.role === 'agent' && newMessage.content.startsWith('<SEND>')) {
-        const outlineContent = newMessage.content.substring('<SEND>'.length).trim();
-        console.log('Agent sent outline for backend:', outlineContent);
+      // Check if the message is a JSON output from the agent
+      if (newMessage.role === 'agent') {
+        try {
+          const parsedContent = JSON.parse(newMessage.content);
+          if (parsedContent && parsedContent.status === 'ACK' && Array.isArray(parsedContent.actions)) {
+            console.log('Agent sent approved actions for backend:', parsedContent.actions);
 
-        // Call the Next.js API endpoint to save the outline
-        fetch('/api/save-outline', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ actions: [outlineContent] }), // Assuming the outline is a single string for now
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              console.log('Outline successfully sent to backend:', data);
-            } else {
-              console.error('Failed to send outline to backend:', data);
-            }
-          })
-          .catch(error => {
-            console.error('Error sending outline to backend:', error);
-          });
+            // Call the Next.js API endpoint to save the outline
+            fetch('/api/save-outline', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ actions: parsedContent.actions }),
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  console.log('Actions successfully sent to backend:', data);
+                } else {
+                  console.error('Failed to send actions to backend:', data);
+                }
+              })
+              .catch(error => {
+                console.error('Error sending actions to backend:', error);
+              });
+          }
+        } catch (error) {
+          // Not a JSON message, or invalid JSON. Continue as normal message.
+          console.log('Agent message is not a valid JSON for backend actions, or status is not ACK.');
+        }
       }
     },
     onError: (error) => console.error('Error:', error),

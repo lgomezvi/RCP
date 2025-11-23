@@ -1,11 +1,12 @@
 from openai import OpenAI
 import os
 import sys
+import json
 from dotenv import load_dotenv
 
 load_dotenv()
 
-import json
+
 
 with open("./backend/robot.json", "r") as file:
     robot_capabilities = json.load(file)
