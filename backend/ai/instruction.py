@@ -48,5 +48,4 @@ def action_to_instruction(action):
         max_output_tokens=100
     )
 
-    chroma_response = client.responses.get()
     return response.output_text

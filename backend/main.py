@@ -1,12 +1,13 @@
-from fastapi import FastAPI # main class that creates web app 
+from fastapi import FastAPI, APIRouter, WebSocket # main class that creates web app 
 from fastapi.responses import JSONResponse # to return JSON responses with custom status codes
 
 from backend.db import get_recent_events, get_robot_state, log_event
 # from backend.serial_interface import send_command
-from backend.api import streaming ## ask thomosn what this is abt 
 
 from typing import List, Dict
 from backend.ai.instruction import action_to_instruction
+
+import asyncio
 
 #uvicorn is a lightweight ASGI server to run FastAPI apps, basically it hosts the app
 app = FastAPI()
@@ -16,7 +17,32 @@ ser = None
 ikSolver = None
 arm_ready = False
 
-app.include_router(streaming.router) 
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: list[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
+
+manager = ConnectionManager()
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            await asyncio.sleep(60)  # Keeps the coroutine alive
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+
 
 @app.get("/")
 def root():
@@ -54,10 +80,8 @@ def status():
 #  SEND COMMAND TO ROBOT
 # ===========================
 @app.post("/command")
-
 # now we are dircetly inetarcting with the arduino through fastapi and logging eveyrthing
-
-def command(cmd: Dict[str, List[str]]): # you pass a string which will be the command to send to the robot
+async def command(cmd: Dict[str, List[str]]): # you pass a string which will be the command to send to the robot
     # Log the outgoing commandis being done in the send_command function
     try:
         instructions = []
@@ -66,16 +90,18 @@ def command(cmd: Dict[str, List[str]]): # you pass a string which will be the co
             instructions.append(action_to_instruction(action))
             # TODO measure confidence of slm output
             # TODO LLM+sensor context call
+            await manager.broadcast(instructions[-1])
+            
         return {"instructions": instructions}
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
-from backend.robot_controller import move_joint
+# from backend.robot_controller import move_joint
 
-@app.post("/move")
-def move(joint: str, angle: int):
-    return move_joint(joint, angle)
+# @app.post("/move")
+# def move(joint: str, angle: int):
+#     return move_joint(joint, angle)
 
 
 
