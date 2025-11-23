@@ -31,6 +31,7 @@ def action_to_instruction(action):
     RULES:
     - Output JSON ONLY
     - Use only actions and axes defined in capabilities
+    - only one axis per instruction
     - Follow min/max/default values
     - If missing a parameter → use default values
     - If action is unclear → return {{"error": "invalid action"}}

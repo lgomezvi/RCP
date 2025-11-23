@@ -105,13 +105,33 @@
 from serial import Serial
 import time
 import os
+import sys
 
-arduino = Serial(port=os.getenv("ARDUINO_LOCATION"), baudrate=115200, timeout=1) 
-time.sleep(2)  # wait for Arduino to reset
+joints = {
+    "waist": 6,
+    "shoulder": 3,
+    "elbow": 5,
+    "wrist_roll": 11,
+    "wrist_pitch": 9,
+    "gripper": 10,
+}
 
-def send_angle(angle: int):
-    arduino.write(f"3 {angle}".encode())  # send command
+def open_arduino():
+    arduino = Serial(port=os.getenv("ARDUINO_LOCATION"), baudrate=115200, timeout=1) 
+    time.sleep(2)  # wait for Arduino to reset
+    return arduino
+
+def execute(arduino, instruction):
+    try:
+        print(instruction["parameters"]["axis"])
+        joint = int(joints[instruction["parameters"]["axis"]])
+        angle = int(instruction["parameters"]["target_angle_deg"])
+        send_angle(arduino, joint, angle)
+    except:
+        print("Invalid instruction or angle input")
+
+def send_angle(arduino, joint: int, angle: int):
+    print(f"{joint} {angle}".strip().encode())
+    arduino.write(f"{joint} {angle}".encode())  # send command
     response = arduino.readline().decode().strip()
     print("Arduino response:", response)
-
-send_angle(0)

@@ -1,5 +1,7 @@
 from fastapi import FastAPI, APIRouter, WebSocket, WebSocketDisconnect # main class that creates web app 
 from fastapi.responses import JSONResponse # to return JSON responses with custom status codes
+import json
+import os
 
 from backend.db import get_recent_events, get_robot_state, log_event
 # from backend.serial_interface import send_command
@@ -8,11 +10,11 @@ from typing import List, Dict
 from backend.ai.instruction import action_to_instruction
 
 import asyncio
-import requests
-import os
+from backend.serial_interface import open_arduino, execute, send_angle
 
 #uvicorn is a lightweight ASGI server to run FastAPI apps, basically it hosts the app
 app = FastAPI()
+arduino = open_arduino()
 
 # ChromaDB backend configuration
 CHROMADB_BASE_URL = os.getenv("CHROMADB_BASE_URL", "http://localhost:5000")
@@ -139,16 +141,13 @@ async def command(cmd: Dict[str, List[str]]):
                     
                 # TODO: Store the new instruction in ChromaDB for future use
             
-            instructions.append({
-                "action": action,
-                "instruction": instruction,  # Now a dict instead of string
-                "from_cache": use_cache,
-                "similarity": similarity
-            })
+            instructions.append(instruction)
             
             # Broadcast the instruction to connected WebSocket clients
             instruction_str = json.dumps(instruction) if isinstance(instruction, dict) else instruction
             await manager.broadcast(instruction_str)
+            execute(arduino, instructions[-1])
+            await manager.broadcast(instructions[-1])
             
         return {"instructions": instructions}
     except Exception as e:
@@ -164,7 +163,5 @@ async def command(cmd: Dict[str, List[str]]):
 # @app.post("/move")
 # def move(joint: str, angle: int):
 #     return move_joint(joint, angle)
-
-
 
         
