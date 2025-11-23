@@ -1,7 +1,7 @@
-import { SendHorizontal } from 'lucide-react';
+import { CirclePlay } from 'lucide-react';
 
 const SendHorizontalIcon = (props: React.SVGProps<SVGSVGElement>) => {
-  return <SendHorizontal {...props} />;
+  return <CirclePlay {...props} />;
 };
 
 export default SendHorizontalIcon;

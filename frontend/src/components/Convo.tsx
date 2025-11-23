@@ -99,8 +99,8 @@ export default function Conversation() {
 
   return (
     <div className="flex flex-col justify-between items-center w-full h-full bg-background">
-      <div className="flex justify-between items-center p-4 w-full rounded-lg text-foreground bg-card">
-        <div className={`${isConnected ? 'bg-[oklch(0.85_0.15_140)]' : 'bg-[oklch(0.25_0.005_270)]'} bg-opacity-50 rounded-md p-1 px-2 border border-white`}>
+      <div className="flex justify-between items-center p-4 w-full rounded-lg bg-card">
+        <div className={`${isConnected ? 'text-[#00B271] border-1 border-[#00B271] bg-[oklch(0.2627_0.0574_162.26)]' : 'bg-[oklch(0.25_0.005_270)]'} rounded-md p-1 px-2`}>
           <p className={`${isConnected ? 'text-foreground' : 'text-gray-400'}`}>• {isConnected ? 'Online' : 'Offline'}</p>
         </div>
         <button
