@@ -98,7 +98,7 @@ export default function Conversation() {
 
   return (
     <div className="flex flex-col justify-between items-center w-full h-full bg-background">
-      <div className="flex justify-between items-center p-4 w-full rounded-lg text-foreground bg-card">
+      <div className="flex justify-between items-center p-2 w-full text-foreground bg-card">
         <p>Status: {conversation.status}</p>
         <p>Agent {conversation.isSpeaking ? 'Speaking' : 'Listening'}</p>
         <button
@@ -110,10 +110,10 @@ export default function Conversation() {
         </button>
       </div>
 
-      <div className="overflow-y-auto p-4 w-full flex-grow max-h-[calc(100%-12rem)] rounded border-t border-b border-input">
+      <div className="overflow-y-auto p-4 w-full flex-grow max-h-[calc(100%-12rem)] border-t border-b border-input">
         {messages.map((msg) => (
           <div key={msg.id} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-            <span className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-primary text-foreground' : 'bg-secondary text-foreground'}`}>
+            <span className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-gray-700 text-foreground' : 'bg-gray-800 text-foreground'}`}>
               {msg.content}
             </span>
           </div>
