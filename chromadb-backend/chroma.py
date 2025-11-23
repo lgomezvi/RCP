@@ -8,13 +8,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_chroma_client() -> ClientAPI:
-    if 'chroma_client' not in g:
-        g.chroma_client = chromadb.CloudClient(
-            api_key=os.getenv("CHROMA_API_KEY"),
-            tenant=os.getenv("CHROMA_TENANT"),
-            database=os.getenv("CHROMA_DATABASE")
-        )
-    return g.chroma_client
+    # if 'chroma_client' not in g:
+    #     g.chroma_client = chromadb.CloudClient(
+    #         api_key=os.getenv("CHROMA_API_KEY"),
+    #         tenant=os.getenv("CHROMA_TENANT"),
+    #         database=os.getenv("CHROMA_DATABASE")
+    #     )
+    # return g.chroma_client
+    return chromadb.EphemeralClient()
     
 def get_chroma_collection() -> Collection:
     chroma_client = get_chroma_client()
