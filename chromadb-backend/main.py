@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from .chroma import get_chroma_collection
+from chroma import get_chroma_collection  # REMOVE THE DOT!
 import json
 import math
 
